@@ -1,0 +1,23 @@
+{
+  "name": "battleship",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "watch": "npm run test -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timothycohen/battleship.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/timothycohen/battleship/issues"
+  },
+  "homepage": "https://github.com/timothycohen/battleship#readme",
+  "devDependencies": {
+    "jest": "^27.4.3"
+  }
+}
