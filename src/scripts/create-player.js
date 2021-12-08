@@ -20,6 +20,7 @@ const createPlayer = ((name, human) => {
     }
     return pos
   }
+
   return {
     name,
     'human': human,

@@ -15,7 +15,7 @@ const createShip = (length => {
     if (hitPos === undefined || hitPos >= length || hitPos < 0) throw Error('argument not within length')
     if (!Number.isInteger(hitPos)) throw Error('argument must be an integer')
 
-    for (pos of Object.keys(ship)){
+    for (const pos of Object.keys(ship)){
       if (hitPos === +pos && ship[pos] === false){
         ship[pos] = true;
         return true;
@@ -27,13 +27,20 @@ const createShip = (length => {
   }
 
   function isSunk() {
-    for (pos of Object.keys(ship)){
+    for (const pos of Object.keys(ship)){
       if (ship[pos] === false) return false
     }
     return true;
   }
 
-  const inspectShip = () => ship;
+  function inspectShip(pos){
+    if (pos === undefined || pos >= length || pos < 0) throw Error('argument not within length')
+    if (!Number.isInteger(pos)) throw Error('argument must be an integer')
+
+    return ship[pos]
+  }
+
+
 
   return {
     length,

@@ -1,4 +1,4 @@
-const { createPlayer } = require('./create-player.js')
+const { createPlayer } = require('../create-player.js')
 
 it('correctly assigns a name and species', () => {
   const player1 = createPlayer('Jane', true)

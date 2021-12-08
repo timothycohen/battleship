@@ -1,4 +1,4 @@
-const { createGameboard } = require('./create-gameboard')
+const { createGameboard } = require('../create-gameboard')
 
 it('creates a board of 10x10 null squares', () =>{
   let row = [null, null, null, null, null, null, null, null, null, null]
@@ -99,4 +99,15 @@ test('receivedAttack returns true if and only if a ship at the position has been
     .toBe(true)
   expect(board.receiveAttack([4,2]))
     .toBe(false)
+})
+
+test('getShips returns an array of all ship objects on the board', () => {
+  const board = createGameboard();
+  board.placeShip([3,2], 3, 'ver')
+  board.placeShip([6,6], 2, 'hor')
+
+  expect(board.getShips().length)
+    .toBe(2)
+  expect(typeof board.getShips()[0])
+    .toBe("object")
 })

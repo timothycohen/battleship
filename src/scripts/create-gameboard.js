@@ -1,10 +1,11 @@
 const { createShip } = require("./create-ship");
+
 /*
-each player has two gameboards:
-  one to mark the position and status of their own ships
-  one to mark the hits/misses against their opponent
+each player has a gameboard
 the gameboards have squares, each of which have one of three possible states:
   miss, null, or a ship state such as: {id: 3, position: 0}
+on each turn the player can view their gameboard with ship, hit ship, sunk ship, missed, nothing
+they can also view their opponent's gameboard with everything except the ships viewable
 */
 
 const createGameboard = (() => {
@@ -76,13 +77,12 @@ const createGameboard = (() => {
         && typeof board[pos[0]][pos[1]]['id'] === 'number'){
       let id = board[pos[0]][pos[1]]['id']
       let position = board[pos[0]][pos[1]]['position']
-      ship = getShipById(id)
       return getShipById(id).hit(position)
     }
   }
 
   function gameOver() {
-    over = true;
+    let over = true;
     ships.forEach(ship => {
       if (ship.isSunk() === false) over = false
     });
@@ -104,16 +104,19 @@ const createGameboard = (() => {
   }
 
   function getShipById(id) {
-    for (ship of ships){
+    for (const ship of ships){
       if (ship.id === id) return ship
     }
   }
+
+  const getShips = () => ships
 
   return{
     getBoard,
     placeShip,
     receiveAttack,
     gameOver,
+    getShips,
   }
 })
 

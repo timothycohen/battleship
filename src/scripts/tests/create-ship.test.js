@@ -1,4 +1,4 @@
-const { createShip } = require('./create-ship.js')
+const { createShip } = require('../create-ship.js')
 
 it('produces an object', () => {
   expect(typeof createShip(3))
@@ -96,3 +96,28 @@ test('isSunk returns true after all its positions have been hit', () => {
   expect(ship.isSunk())
     .toBe(true)
 })
+
+
+test('inspectShip throws error if true if the ship has been hit at that position', () =>{
+  const ship = createShip(4);
+  ship.hit(2)
+  expect(ship.inspectShip(0))
+    .toBe(false)
+  expect(ship.inspectShip(2))
+    .toBe(true)
+  ship.hit(0)
+  expect(ship.inspectShip(0))
+  .toBe(true)
+})
+
+test('inspectShip throws an error if the argument isn\'t an integer from 0 to ship length -1', () => {
+  const ship = createShip(4);
+
+  expect(() => ship.inspectShip(4))
+    .toThrowError('argument not within length')
+  expect(() => ship.inspectShip(-1))
+    .toThrowError('argument not within length')
+  expect(() => ship.inspectShip('3'))
+    .toThrowError('argument must be an integer')
+
+  })
