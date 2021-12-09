@@ -16,9 +16,6 @@
 - [ ] gameover animation
 - [ ] check on multiple screen sizes
 
-### bugs
-- [ ] attack animation on gameboard needs to take scroll height into consideration
-
 ### Keywords used in code:
 - DEVTOOL
 - NOTIMPLEMENTED

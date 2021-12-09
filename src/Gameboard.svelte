@@ -38,10 +38,10 @@
     attack['hit'] = $boards[opponent].receiveAttack([attack.boardY, attack.boardX])
 
     let hitPosition = e.target.getBoundingClientRect();
-    attack['height'] = (hitPosition.bottom - hitPosition.top)
-    attack['width'] = (hitPosition.right - hitPosition.left)
-    attack['top'] = hitPosition.top
-    attack['left'] = hitPosition.left
+    attack['height'] = hitPosition.bottom - hitPosition.top
+    attack['width'] = hitPosition.right - hitPosition.left
+    attack['top'] = hitPosition.top + window.scrollY
+    attack['left'] = hitPosition.left + window.scrollX
     animate = true;
   }
 
