@@ -2,6 +2,43 @@ html {
   box-sizing: border-box;
 }
 
+*{
+  padding: 0;
+  margin: 0;
+  color: var(--bluedarken70);
+  user-select: none;
+  caret-color: transparent;
+}
+
+body, .fullScreen{
+  width: 100%;
+  min-height: 100vh;
+}
+
 *, *:before, *:after {
   box-sizing: inherit;
+}
+
+@font-face {
+  font-family: 'Coverack';
+  src: url('/fonts/Coverack/Coverack Regular/Coverack Regular.ttf');
+}
+
+/* https://maketintsandshades.com/#005EB8 */
+:root{
+  --blueroot: #005eb8;
+  --bluelighten90: #e6eff8;
+  --bluedarken70: #001c37;
+  --bluedarken60: #00264a;
+  --bluedarken40: #00386e;
+  --grayshadow: #555;
+  --gold: #DBA632;
+}
+
+button{
+  border: 1px solid var(--bluelighten90);
+  background-color: var(--bluedarken70);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
 }

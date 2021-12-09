@@ -24,6 +24,11 @@
   player2Board.receiveAttack([0, 3])
   player1Board.receiveAttack([6, 3])
   player2Board.receiveAttack([1, 8])
+  player1Board.receiveAttack([0, 1])
+  player2Board.receiveAttack([0, 1])
+  player1Board.receiveAttack([0, 2])
+  player2Board.receiveAttack([0, 5])
+
 
   $boards = [player1Board, player2Board]
   $view = 'pass'

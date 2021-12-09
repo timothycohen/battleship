@@ -50,23 +50,18 @@
   }
 
   .playerCard{
-    background-color: white;
+    background-color: var(--blueroot);
     box-shadow: 0 0 0 2px gray;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
-  }
-
-  .name{
-
-  }
-
-  .details{
-
+    color: white;
+    box-shadow: 0 5px 15px -7px var(--grayshadow);
   }
 
   .active{
-    transform: scale(1.5)
+    transform: scale(1.5);
+    box-shadow: 0px 0px 10px 5px var(--gold);
   }
 
 </style>

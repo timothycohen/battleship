@@ -1,12 +1,16 @@
 <script>
   import { fade } from 'svelte/transition'
-  import { view, playerUp, boards } from './store'
+  import { view, playerUp, boards, players } from './store'
 
   let opponent = $playerUp === 1 ? 0 : 1
   let gameboardPlayer = $boards[$playerUp].getBoard()
   let gameboardOpponent = $boards[opponent].getBoard()
   let playerShips = $boards[$playerUp].getShips()
   let opponentShips = $boards[opponent].getShips()
+
+  let show = false;
+  let animate = false;
+  let attack = {}
 
   function checkShip(y, x, player) {
     if (player === opponent){
@@ -28,64 +32,122 @@
     return ship.isSunk()
   }
 
-  function sendAttack(e){
-    let hit = $boards[opponent].receiveAttack([+e.target.dataset.y, +e.target.dataset.x])
+  function prepareAttack(e){
+    attack['boardY'] = +e.target.dataset.y;
+    attack['boardX'] = +e.target.dataset.x;
+    attack['hit'] = $boards[opponent].receiveAttack([attack.boardY, attack.boardX])
+
+    let hitPosition = e.target.getBoundingClientRect();
+    attack['height'] = (hitPosition.bottom - hitPosition.top)
+    attack['width'] = (hitPosition.right - hitPosition.left)
+    attack['top'] = hitPosition.top
+    attack['left'] = hitPosition.left
+    animate = true;
+  }
+
+  function sendAttack(){
     if ($boards[opponent].gameOver()) $view = 'over'
-    else if (hit && isSunk(+e.target.dataset.y, +e.target.dataset.x, opponent)) $view = 'sunk'
-    else if (hit) $view = 'hit'
+    else if (attack.hit && isSunk(attack.boardY, attack.boardX, opponent)) $view = 'sunk'
+    else if (attack.hit) $view = 'hit'
     else $view = 'miss'
   }
 
+
 </script>
 
-<h1>Opponent</h1>
-<div class="gameboard__opponent" in:fade>
-  {#each gameboardOpponent as row, y}
-    {#each row as square, x}
+<div class="gameboard fullScreen">
 
-      {#if square === 'miss'}
-        <div class="square missed" data-y={y} data-x={x}>missed</div>
-      {:else if square !== null && typeof square === 'object' && checkShip(y, x, opponent) & !isSunk(y, x, opponent)}
-        <div class="square hit" data-y={y} data-x={x}>hit!</div>
-      {:else if square !== null && typeof square === 'object' && isSunk(y, x, opponent)}
-        <div class="square hit" data-y={y} data-x={x}>sunk!</div>
-      {:else}
-        <div class="square open" data-y={y} data-x={x} on:click={sendAttack}></div>
-      {/if}
+  <div class="player">
+    <div class="header">
+      <h1>Send an attack to {$players[opponent].name}'s board!</h1>
+    </div>
 
-    {/each}
-  {/each}
-</div>
+    <div class="gameboard__opponent" in:fade>
+      {#each gameboardOpponent as row, y}
+        {#each row as square, x}
 
-<h1>My Ships</h1>
-<div class="gameboard__player" in:fade>
-  {#each gameboardPlayer as row, y}
-    {#each row as square, x}
+          {#if square === 'miss'}
+            <div class="square missed" data-y={y} data-x={x}>MISS</div>
+          {:else if square !== null && typeof square === 'object' && checkShip(y, x, opponent) & !isSunk(y, x, opponent)}
+            <div class="square hit" data-y={y} data-x={x}>HIT</div>
 
-    {#if square === 'miss'}
-      <div class="square missed" data-y={y} data-x={x}>missed</div>
-    {:else if square !== null && typeof square === 'object' && checkShip(y, x, $playerUp) && !isSunk(y, x, $playerUp)}
-      <div class="square hit" data-y={y} data-x={x}>damaged!</div>
-    {:else if square !== null && typeof square === 'object' && isSunk(y, x, $playerUp)}
-      <div class="square hit" data-y={y} data-x={x}>sunk!</div>
-    {:else if square !== null && typeof square === "object" && !checkShip(y, x, $playerUp)}
-      <div class="square ship">my ship</div>
-    {:else}
-      <div class="square" data-y={y} data-x={x}></div>
-    {/if}
+          {:else if square !== null && typeof square === 'object' && isSunk(y, x, opponent)}
+            <div class="square hit" data-y={y} data-x={x}>
+              <div class="ship">SUNK</div>
+            </div>
+          {:else}
+            <div class="square open" data-y={y} data-x={x} on:click={prepareAttack}></div>
+          {/if}
 
-    {/each}
-  {/each}
+        {/each}
+      {/each}
+    </div>
+  </div>
+
+  <div class="opponent">
+    <div class="header">
+      <h1>My Board</h1>
+      <button on:click={ () => show = !show }>{show ? 'Hide' : 'Show'} ships</button>
+    </div>
+
+    <div class="gameboard__player" in:fade>
+      {#each gameboardPlayer as row, y}
+        {#each row as square, x}
+
+          {#if square === 'miss'}
+            <div class="square missed" data-y={y} data-x={x}>MISS</div>
+          {:else if square !== null && typeof square === 'object' && checkShip(y, x, $playerUp) && !isSunk(y, x, $playerUp)}
+            <div class="square hit" data-y={y} data-x={x}>HIT</div>
+          {:else if square !== null && typeof square === 'object' && isSunk(y, x, $playerUp)}
+            <div class="square hit" data-y={y} data-x={x}>
+              <div class="ship">SUNK</div>
+            </div>
+          {:else if square !== null && typeof square === "object" && !checkShip(y, x, $playerUp)}
+            <div class="square">
+              {#if show}<div class="ship"></div>{/if}
+            </div>
+          {:else}
+            <div class="square" data-y={y} data-x={x}></div>
+          {/if}
+
+        {/each}
+      {/each}
+    </div>
+  </div>
+
+  {#if animate}
+  <img in:fade={{duration: 1000, easing: (t) => t}}
+    on:introend="{sendAttack}"
+    class="icon--bomb" src="/icons/bomb.svg" alt="bomb icon"
+    style="--height: {attack.height}px; --width: {attack.width}px; --top: {attack.top}px; --left: {attack.left}px; "
+  />
+  {/if}
+
 </div>
 
 <style>
 
+.gameboard{
+  padding: 1rem;
+}
+
+.player, .opponent{
+  padding: 1rem 0;
+}
+
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2rem;
+}
+
 .gameboard__opponent, .gameboard__player{
-  user-select: none;
-  caret-color: transparent;
   display: grid;
   grid-template-columns: repeat(10, auto);
   grid-template-rows: repeat(10, auto);
+  border: 1rem solid var(--gold);
 }
 
 .square{
@@ -100,16 +162,47 @@
   background-color: rgb(173, 196, 230);
 }
 
+.missed, .hit, .ship{
+  font-weight: bolder;
+}
+
 .missed{
+  background: url(/icons/splash.svg) no-repeat center;
+  background-size: contain;
   background-color: rgb(186, 194, 206);
 }
 
 .hit{
+  background: url(/icons/explosion.svg) no-repeat center;
+  background-size: contain;
   background-color: rgb(230, 173, 173);
+}
+
+.ship{
+  width: 100%;
+  height: 100%;
+  background: url(/icons/ship.svg) no-repeat center;
+  background-size: contain;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .open{
   cursor: pointer;
+}
+
+.icon--bomb{
+  position: absolute;
+  height: var(--height);
+  width: var(--width);
+  top: var(--top);
+  left: var(--left);
+}
+
+button{
+  font-size: 1.5rem;
+  padding: .5rem;
 }
 
 </style>
