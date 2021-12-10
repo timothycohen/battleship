@@ -10,26 +10,30 @@ they can also view their opponent's gameboard with everything except the ships v
 
 const createGameboard = (() => {
   const GRIDSIZE = 10;
+  const VALIDNAMES = ['Destroyer', 'Submarine', 'Cruiser', 'Battleship', 'Carrier'];
+
   let ships = [];
+
   let board = initializeBoard(GRIDSIZE);
 
-  function placeShip(position, shipLength, direction) {
+  function placeShip(position, shipName, direction) {
+
     let positions = [];
 
     // check argument validity
     if (
           arguments.length !== 3
       || !(Array.isArray(position) && position.length === 2 && Number.isInteger(position[0]) && Number.isInteger(position[1]))
-      || !(Number.isInteger(shipLength))
+      || !VALIDNAMES.includes(shipName)
       || !(direction === 'ver' || direction === 'hor')
       ){
-      throw Error(`arguments: [int y, int x] position, int shipLength, 'ver' or 'hor'`)
+      throw Error(`arguments: [int y, int x] position, ship name, 'ver' or 'hor'`)
     }
 
-    const tempShip = createShip(shipLength)
+    const tempShip = createShip(shipName)
 
     // calculate positions
-    for (let i = 0; i < shipLength; i++){
+    for (let i = 0; i < tempShip.length; i++){
       if (direction === 'ver'){
         positions.push([position[0]+i, position[1]]);
       } else if (direction === 'hor') {
@@ -53,9 +57,9 @@ const createGameboard = (() => {
       }
     })
 
-    // write the ship id into the board
+    // write the ship object and which part of the ship it is into the board
     positions.forEach((pos, i) => {
-      board[pos[0]][pos[1]] = { id: tempShip.id, position: i }
+      board[pos[0]][pos[1]] = { ship: tempShip, position: i }
     })
     ships.push(tempShip)
     return true;
@@ -74,8 +78,8 @@ const createGameboard = (() => {
       return false;
     }
     if (typeof board[pos[0]][pos[1]] === 'object'
-        && typeof board[pos[0]][pos[1]]['id'] === 'number'){
-      let id = board[pos[0]][pos[1]]['id']
+        && typeof board[pos[0]][pos[1]]['ship']['id'] === 'number'){
+      let id = board[pos[0]][pos[1]]['ship']['id']
       let position = board[pos[0]][pos[1]]['position']
       return getShipById(id).hit(position)
     }
@@ -111,9 +115,60 @@ const createGameboard = (() => {
 
   const getShips = () => ships
 
+  function placeShipsRandomly() {
+    let count = 0;
+    while(ships.length<VALIDNAMES.length || count === 200){
+      try{
+        placeShip(chooseRandomPos(), VALIDNAMES[ships.length], chooseRandomDir())
+      } catch (err) {
+        count++
+        if (err.message !== 'ships cannot overlap'
+          && err.message !== 'out of bounds. max grid size is 10') {
+          throw(err)
+        }
+      }
+    }
+    if (count === 200) return false
+    return true;
+  }
+
+  function chooseRandomPos(){
+    const ran1 = Math.floor(Math.random()*(GRIDSIZE-1))
+    const ran2 = Math.floor(Math.random()*(GRIDSIZE-1))
+    return [ran1, ran2]
+  }
+
+  function chooseRandomDir(){
+    return Math.random() < .5 ? 'hor' : 'ver'
+  }
+
+  function removeShip(pos) {
+    try{
+      if (board[pos[0]][pos[1]] === null || typeof board[pos[0]][pos[1]] !== 'object') return false
+
+      const shipId = board[pos[0]][pos[1]].ship.id;
+
+      for (let y = 0; y<GRIDSIZE; y++){
+        for (let x = 0; x<GRIDSIZE; x++){
+          const square = board[y][x]
+          if (square === null || typeof square !== 'object') continue
+          if (board[y][x].ship.id === shipId) board[y][x] = null
+        }
+      }
+
+      ships = ships.filter(ship => ship.id !== shipId)
+
+      return true;
+    } catch(err) {
+      return false;
+    }
+  }
+
   return{
     getBoard,
     placeShip,
+    removeShip,
+    placeShipsRandomly,
     receiveAttack,
     gameOver,
     getShips,
@@ -121,8 +176,3 @@ const createGameboard = (() => {
 })
 
 module.exports = {createGameboard}
-
-let board = createGameboard();
-board.placeShip([2,4], 4, 'ver')
-board.placeShip([0,0], 3, 'hor')
-board.receiveAttack([0,0])

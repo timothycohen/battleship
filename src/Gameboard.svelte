@@ -14,20 +14,20 @@
 
   function checkShip(y, x, player) {
     if (player === opponent){
-      let ship = opponentShips.find(s => s.id === gameboardOpponent[y][x].id)
+      let ship = opponentShips.find(s => s.id === gameboardOpponent[y][x].ship.id)
       return ship.inspectShip(gameboardOpponent[y][x].position)
     }
 
-    let ship = playerShips.find(s => s.id === gameboardPlayer[y][x].id)
+    let ship = playerShips.find(s => s.id === gameboardPlayer[y][x].ship.id)
     return ship.inspectShip(gameboardPlayer[y][x].position)
   }
 
   function isSunk(y, x, player) {
     let ship;
     if (player === opponent){
-      ship = opponentShips.find(s => s.id === gameboardOpponent[y][x].id)
+      ship = opponentShips.find(s => s.id === gameboardOpponent[y][x].ship.id)
     } else {
-      ship = playerShips.find(s => s.id === gameboardPlayer[y][x].id)
+      ship = playerShips.find(s => s.id === gameboardPlayer[y][x].ship.id)
     }
     return ship.isSunk()
   }
@@ -69,10 +69,10 @@
           {#if square === 'miss'}
             <div class="square missed" data-y={y} data-x={x}>MISS</div>
           {:else if square !== null && typeof square === 'object' && checkShip(y, x, opponent) & !isSunk(y, x, opponent)}
-            <div class="square hit" data-y={y} data-x={x}>HIT</div>
+            <div class="square hit" data-id={square.ship.id} date-shipName={square.ship.name} data-y={y} data-x={x}>HIT</div>
 
           {:else if square !== null && typeof square === 'object' && isSunk(y, x, opponent)}
-            <div class="square hit" data-y={y} data-x={x}>
+            <div class="square hit" data-id={square.ship.id} date-shipName={square.ship.name} data-y={y} data-x={x}>
               <div class="ship">SUNK</div>
             </div>
           {:else}
@@ -97,9 +97,9 @@
           {#if square === 'miss'}
             <div class="square missed" data-y={y} data-x={x}>MISS</div>
           {:else if square !== null && typeof square === 'object' && checkShip(y, x, $playerUp) && !isSunk(y, x, $playerUp)}
-            <div class="square hit" data-y={y} data-x={x}>HIT</div>
+            <div class="square hit" data-id={square.ship.id} date-shipName={square.ship.name} data-y={y} data-x={x}>HIT</div>
           {:else if square !== null && typeof square === 'object' && isSunk(y, x, $playerUp)}
-            <div class="square hit" data-y={y} data-x={x}>
+            <div class="square hit" data-id={square.ship.id} date-shipName={square.ship.name} data-y={y} data-x={x}>
               <div class="ship">SUNK</div>
             </div>
           {:else if square !== null && typeof square === "object" && !checkShip(y, x, $playerUp)}

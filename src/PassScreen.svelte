@@ -2,6 +2,8 @@
   import { players, view, playerUp } from './store'
   import { fly } from 'svelte/transition'
 
+  if (!$players[1].human) $view='board'
+
   $playerUp = $playerUp === 0 ? 1: 0;
   let ready = false;
 

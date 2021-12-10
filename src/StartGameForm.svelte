@@ -5,6 +5,7 @@
   import { onMount } from 'svelte'
 
   let bgLoaded = false
+  let twoPlayer = true;
 
   onMount(() => bgLoaded = true)
 
@@ -13,7 +14,9 @@
 
   const startGame = () => {
     const playerNames = [player1Name, player2Name];
-    $players = playerNames.map(createPlayer);
+    let isHuman = [true, twoPlayer];
+
+    $players = playerNames.map((name, i) => createPlayer(name, isHuman[i]));
     $playerUp = 1;
     $view = 'setup'
   }
@@ -21,6 +24,7 @@
   // DEVTOOL : seed players
   // player1Name = 'Jane';
   // player2Name = 'Joe';
+  // twoPlayer = false
   // startGame();
 
 </script>
@@ -37,9 +41,19 @@
   <form id="players" on:submit|preventDefault={startGame}>
     <label for="player1">Player 1</label>
     <input id="player1" required type="text" bind:value={player1Name}/>
-    <label for="player2">Player 2</label>
+
+    <label for="player2">
+      {#if twoPlayer}Player 2{:else}Computer{/if}
+    </label>
     <input id="player2" required type="text" bind:value={player2Name}/>
+
+    <button class="playerCountBtn"
+      on:click|preventDefault={() => twoPlayer = !twoPlayer}>
+      {#if twoPlayer}1 Player{:else}2 Player{/if}
+    </button>
+
     <button class="newGameBtn">New Game</button>
+
   </form>
 </div>
 {/if}
@@ -126,15 +140,30 @@
   }
 
   .newGameBtn{
-    font-size: .75rem;
+    font-size: 1rem;
     height: 3rem;
-    grid-column-start: 1;
+    grid-column-start: 2;
     grid-column-end: 3;
-    width: 75%;
+    width: 100%;
     margin: auto;
   }
 
+  .playerCountBtn{
+    justify-self: center;
+    align-self: flex-end;
+    font-size: .75rem;
+    height: 2rem;
+    width: 70%;
+    grid-column-start: 1;
+    grid-column-end: 2;
+  }
+
   @media only screen and (min-width: 600px) {
+    .playerCountBtn{
+      font-size: .8rem;
+      width: 60%;
+    }
+
     .header{
       padding: 1rem;
     }

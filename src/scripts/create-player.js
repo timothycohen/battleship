@@ -1,14 +1,14 @@
-const createPlayer = ((name, human) => {
+const createPlayer = ((name, human = true) => {
 
   function chooseRandom(max){
-    ran1 = Math.floor(Math.random()*max)
-    ran2 = Math.floor(Math.random()*max)
+    const ran1 = Math.floor(Math.random()*max)
+    const ran2 = Math.floor(Math.random()*max)
     return [ran1, ran2]
   }
 
   function chooseClose(position, max, direction){
     let pos = [...position]
-    let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+    const plusOrMinus = Math.random() < 0.5 ? -1 : 1;
 
     if (direction === 'ver') {
       pos[0] += plusOrMinus

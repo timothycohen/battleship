@@ -1,9 +1,18 @@
 let id = 0;
 
-const createShip = (length => {
-  if (!Number.isInteger(length) || length < 2 || length > 5){
-    throw Error('argument must be an integer between 2 and 5')
-  }
+let nameToLength = {
+  'Carrier': 5,
+  'Battleship': 4,
+  'Cruiser': 3,
+  'Submarine': 3,
+  'Destroyer': 2,
+};
+
+const VALIDNAMES = ['Destroyer', 'Submarine', 'Cruiser', 'Battleship', 'Carrier'];
+
+const createShip = (name => {
+  if (!VALIDNAMES.includes(name)) throw Error(`valid names are ${VALIDNAMES.join(', ')}`)
+  const length = nameToLength[name]
 
   let ship = {}
 
@@ -40,9 +49,8 @@ const createShip = (length => {
     return ship[pos]
   }
 
-
-
   return {
+    name,
     length,
     hit,
     isSunk,
