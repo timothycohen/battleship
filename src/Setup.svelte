@@ -128,13 +128,18 @@
     shipSelections[shipIndex].selected = true
   }
 
+  // DEVTOOL : seed board
+  // placeAllShips()
+  // finish()
+  // placeAllShips()
+  // finish()
+
 </script>
 
 <div in:fade class="fullScreen setup">
 
-  <h1 class="instruction">{$players[currentPlayer].name}, place your ships!</h1>
-
   <div class="shipSelectionContainer">
+    <h1 class="instruction">{$players[currentPlayer].name}, navigate your ships!</h1>
 
     <ul class="shipSelections">
       {#each shipSelections as { name, length, placed, selected } }
@@ -215,30 +220,32 @@
   padding: 1rem;
 }
 
-.instruction{
-  text-align: center;
-  font-size: 2.5rem;
-}
-
 /* #################### SHIP SELECTION #################### */
 
 .shipSelectionContainer{
+  border-radius: 5px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-around;
-  height: 15rem;
+  min-height: 14rem;
   width: 100%;
+  margin-bottom: 1rem;
+
+  background-color: var(--blueroot);
+  background-image: linear-gradient(315deg, var(--bluelighten50) 0%, var(--bluelighten70) 74%);
+}
+
+.instruction{
+  width: 100%;
+  text-align: center;
+  font-size: 2.5rem;
+  margin: .5rem 0;
+  color: var(--bluedarken70);
 }
 
 .shipSelections{
   min-height: 12rem;
-  min-width: 12rem;
-  background-color: var(--bluedarken40);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
 }
 
 .shipSelections li{
@@ -285,9 +292,9 @@
 
 .shipSelections, .optionsContainer, .selectionExample{
   background-color: var(--bluedarken40);
-  min-height: 12rem;
   min-width: 12rem;
   padding: 1rem;
+  margin: .5rem;
   border-radius: 5px;
   box-shadow: 0 5px 15px -7px var(--bluedarken70);
   display: flex;
@@ -298,6 +305,7 @@
 
 .selectionExample{
   justify-content: center;
+  min-height: 14rem;
 }
 
 .selectionExample--name{
@@ -308,11 +316,13 @@
 }
 
 .finishedBtn{
-  color: white;
+  color: var(--bluedarken40);
   padding: .75rem 1rem;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: bolder;
   box-shadow: 0 5px 15px -7px var(--gold);
+  cursor: pointer;
+  border-radius: 5px;
 }
 
 .finishedBtn:hover{
@@ -339,6 +349,11 @@
 
 /* #################### OPTION BUTTONS #################### */
 
+
+.optionsContainer{
+  min-width: 9rem;
+}
+
 .directionBtn,
 .randomBtn,
 .clearBtn{
@@ -346,6 +361,10 @@
   align-items: center;
   justify-content: center;
   padding: .5rem 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: var(--bluelighten60);
+  color: var(--bluedarken40);
 }
 
 .directionBtn:hover,
@@ -372,7 +391,6 @@
   display: grid;
   grid-template-columns: repeat(var(--boardSize), auto);
   grid-template-rows: repeat((--boardSize), auto);
-  border: 1rem solid var(--gold);
 }
 
 .square{
@@ -388,7 +406,6 @@
 }
 
 .ship{
-  font-weight: bolder;
   width: 100%;
   height: 100%;
   background: url(/icons/ship.svg) no-repeat center;
@@ -396,6 +413,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.square .ship{
+  cursor: grab;
 }
 
 .open{

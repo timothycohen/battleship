@@ -34,7 +34,4 @@
 </main>
 
 <style>
-  main{
-    background: #e6eff8;
-  }
 </style>

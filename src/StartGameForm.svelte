@@ -60,10 +60,6 @@
 
 <style>
 
-  *{
-    font-family: 'Coverack';
-  }
-
   .bg, .bgImg, .startGame{
     position: absolute;
     left: 0;
@@ -156,6 +152,18 @@
     width: 70%;
     grid-column-start: 1;
     grid-column-end: 2;
+  }
+
+  button{
+    border: 1px solid var(--bluelighten90);
+    background-color: var(--bluedarken70);
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  button:hover{
+    background-color: var(--bluedarken60);
   }
 
   @media only screen and (min-width: 600px) {

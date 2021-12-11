@@ -60,7 +60,7 @@
 
   <div class="player">
     <div class="header">
-      <h1>Send an attack to {$players[opponent].name}'s board!</h1>
+      <h1>Fire into enemy {$players[opponent].name}'s waters!</h1>
     </div>
 
     <div class="gameboard__opponent" style="--boardSize: {boardSize}" in:fade>
@@ -87,8 +87,8 @@
 
   <div class="opponent">
     <div class="header">
-      <h1>My Board</h1>
-      <button on:click={ () => show = !show }>{show ? 'Hide' : 'Show'} ships</button>
+      <h1>Friendly Waters</h1>
+      <button class="revealShipBtn" on:click={ () => show = !show }>{show ? 'Conceal' : 'Reveal'} ships</button>
     </div>
 
     <div class="gameboard__player" style="--boardSize: {boardSize}" in:fade>
@@ -130,6 +130,7 @@
 
 .gameboard{
   padding: 1rem;
+  color: var(--bluelighten90);
 }
 
 .player, .opponent{
@@ -144,11 +145,14 @@
   gap: 2rem;
 }
 
+.revealShipBtn{
+  margin-bottom: .5rem;
+}
+
 .gameboard__opponent, .gameboard__player{
   display: grid;
   grid-template-columns: repeat(var(--boardSize), auto);
   grid-template-rows: repeat((--boardSize), auto);
-  border: 1rem solid var(--gold);
 }
 
 .square{
@@ -189,8 +193,8 @@
   justify-content: center;
 }
 
-.open{
-  cursor: pointer;
+.open, .icon--bomb{
+  cursor: crosshair;
 }
 
 .icon--bomb{
@@ -202,8 +206,15 @@
 }
 
 button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: var(--bluelighten60);
+  color: var(--bluedarken40);
   font-size: 1.5rem;
-  padding: .5rem;
 }
 
 </style>

@@ -15,13 +15,12 @@
 </script>
 
 <div class="fullScreen passScreen">
-  <h1>{ $players[$playerUp].name } is up.</h1>
-  <h1>Pass the screen!</h1>
+  <h1>{ $players[$playerUp].name }, prepare for attack!</h1>
   <button on:click={ () => ready = true }>Ready!</button>
 </div>
 
 {#if ready}
-<img in:fly={{duration: 1000, x:randX, y:randY, easing: (t) => t}}
+<img in:fly={{duration: 700, x:randX, y:randY, easing: (t) => t}}
   on:introend="{() => $view='board'}"
   class="icon--bomb" src="/icons/bomb.svg" alt="bomb icon"
   style="height: {bombSize}px; width: {bombSize}px;"
@@ -48,7 +47,6 @@
     color: white;
     border-radius: 4px;
     cursor: pointer;
-    font-family: 'Coverack';
   }
 
   button:hover{
