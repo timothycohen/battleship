@@ -4,10 +4,8 @@
   import Scoreboard from "./Scoreboard.svelte";
   import Gameboard from "./Gameboard.svelte";
   import PassScreen from "./PassScreen.svelte";
-  import Sunk from "./Sunk.svelte";
-  import Miss from "./Miss.svelte";
-  import Hit from "./Hit.svelte";
-  import GameOver from "./GameOver.svelte";
+  import ComputerAttack from "./ComputerAttack.svelte";
+  import AttackFeedback from "./components/AttackViews/AttackFeedback.svelte";
   import { view } from './store'
 
 </script>
@@ -22,14 +20,16 @@
     <Gameboard />
   {:else if $view === 'pass'}
     <PassScreen />
+  {:else if $view === 'computerAttack'}
+    <ComputerAttack />
   {:else if $view === 'sunk'}
-    <Sunk />
+    <AttackFeedback type='sunk'/>
   {:else if $view === 'miss'}
-    <Miss />
+    <AttackFeedback type='miss'/>
   {:else if $view === 'hit'}
-    <Hit />
+    <AttackFeedback type='hit'/>
   {:else if $view === 'over'}
-    <GameOver />
+    <AttackFeedback type='over'/>
   {/if}
 </main>
 

@@ -1,6 +1,6 @@
 <script>
   import { createGameboard } from './scripts/create-gameboard'
-  import { boards, view, players, boardSize } from './store'
+  import { boards, view, players, boardSize, twoPlayerMode } from './store'
   import { fade } from 'svelte/transition'
 
   // create a new gameboard for each player
@@ -91,15 +91,15 @@
 
   // moves to the next view after all humans have placed their ships
   function finish() {
-    if (currentPlayer === 0 && $players[1].human) {
+    if (currentPlayer === 0 && $twoPlayerMode) {
       currentPlayer = 1;
       shipSelections.forEach(ship => ship.selected = false)
       shipSelections[0].selected = true
       shipSelections = shipSelections
-    } else if (currentPlayer === 0 && !$players[1].human) {
+    } else if (currentPlayer === 0 && !$twoPlayerMode) {
       currentPlayer = 1;
       placeAllShips()
-      $view = 'pass'
+      $view = 'board'
     } else {
       $view = 'pass'
     }

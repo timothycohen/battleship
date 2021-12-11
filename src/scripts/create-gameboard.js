@@ -166,6 +166,15 @@ const createGameboard = ((size) => {
     }
   }
 
+  function squareStatus(pos) {
+      const square = board[pos[0]][pos[1]]
+      if (square === null) return null
+      if (square === 'miss') return 'miss'
+      if (square.ship.isSunk()) return 'sunk'
+      if (square.ship.inspectShip(square.position)) return 'hit'
+      return 'ship'
+  }
+
   return{
     getBoard,
     placeShip,
@@ -174,6 +183,7 @@ const createGameboard = ((size) => {
     receiveAttack,
     gameOver,
     getShips,
+    squareStatus,
   }
 })
 

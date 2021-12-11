@@ -98,7 +98,7 @@ test('isSunk returns true after all its positions have been hit', () => {
     .toBe(true)
 })
 
-test('inspectShip throws error if true if the ship has been hit at that position', () =>{
+test('inspectShip returns true if the ship has been hit at that position', () =>{
   const ship = createShip("Battleship")
   ship.hit(2)
   expect(ship.inspectShip(0))

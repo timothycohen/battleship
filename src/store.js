@@ -9,3 +9,7 @@ export const boards = writable([])
 export const playerUp = writable()
 
 export const boardSize = 8;
+
+export const lastAttackLocation = writable([])
+
+export const twoPlayerMode = writable(true)

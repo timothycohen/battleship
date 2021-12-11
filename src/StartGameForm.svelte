@@ -1,11 +1,10 @@
 <script>
   import { createPlayer } from './scripts/create-player'
-  import { players, view, playerUp } from './store'
+  import { players, view, playerUp, twoPlayerMode } from './store'
   import { fade } from 'svelte/transition'
   import { onMount } from 'svelte'
 
   let bgLoaded = false
-  let twoPlayer = true;
 
   onMount(() => bgLoaded = true)
 
@@ -14,17 +13,17 @@
 
   const startGame = () => {
     const playerNames = [player1Name, player2Name];
-    let isHuman = [true, twoPlayer];
+    let isHuman = [true, $twoPlayerMode];
 
     $players = playerNames.map((name, i) => createPlayer(name, isHuman[i]));
-    $playerUp = 1;
+    $playerUp = 0;
     $view = 'setup'
   }
 
   // DEVTOOL : seed players
   player1Name = 'Jane';
   player2Name = 'Joe';
-  // twoPlayer = false
+  // $twoPlayerMode = false
   // startGame();
 
 </script>
@@ -43,13 +42,13 @@
     <input id="player1" required type="text" bind:value={player1Name}/>
 
     <label for="player2">
-      {#if twoPlayer}Player 2{:else}Computer{/if}
+      {#if $twoPlayerMode}Player 2{:else}Computer{/if}
     </label>
     <input id="player2" required type="text" bind:value={player2Name}/>
 
     <button class="playerCountBtn"
-      on:click|preventDefault={() => twoPlayer = !twoPlayer}>
-      {#if twoPlayer}1 Player{:else}2 Player{/if}
+      on:click|preventDefault={() => $twoPlayerMode = !$twoPlayerMode}>
+      {#if $twoPlayerMode}1 Player{:else}2 Player{/if}
     </button>
 
     <button class="newGameBtn">New Game</button>

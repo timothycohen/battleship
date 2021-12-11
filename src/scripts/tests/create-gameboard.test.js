@@ -157,7 +157,7 @@ test('removeShip removes a ship from the board if present and returns true', () 
     .toBe(0)
   expect(board.getBoard())
     .toEqual(nullArray)
-  })
+})
 
 test('removeShip returns false if no ship was present at that position', () => {
   const board = createGameboard(10);
@@ -166,3 +166,35 @@ test('removeShip returns false if no ship was present at that position', () => {
   expect(board.removeShip([2,2]))
     .toBe(false)
 })
+
+test('squareStatus returns the status: null, miss, ship, hit, sunk', () => {
+  const board = createGameboard(10);
+
+  board.placeShip([3,2], 'Destroyer', 'ver')
+  // unattacked ship space
+  expect(board.squareStatus([3,2]))
+    .toBe('ship')
+
+  // attacked ship space
+  board.receiveAttack([3,2])
+  expect(board.squareStatus([3,2]))
+    .toBe('hit')
+
+  // unattacked ship space connected to an attacked ship
+  expect(board.squareStatus([4,2]))
+    .toBe('ship')
+  board.receiveAttack([4,2])
+  // sunk ship space
+  expect(board.squareStatus([4,2]))
+    .toBe('sunk')
+
+  // null space
+  expect(board.squareStatus([0,0]))
+    .toBe(null)
+
+  board.receiveAttack([0,0])
+  // miss space
+  expect(board.squareStatus([0,0]))
+    .toBe('miss')
+})
+

@@ -1,31 +1,16 @@
 <script>
-  import { players, view, playerUp } from './store'
-  import { fly } from 'svelte/transition'
+  import { players, view, playerUp} from './store'
+  import Bomb from './components/Bomb.svelte'
 
-  if (!$players[1].human) $view='board'
-
-  $playerUp = $playerUp === 0 ? 1: 0;
   let ready = false;
-
-  // calculate bomb size and a random flight trajectory
-  let bombSize = .5*window.innerWidth
-  let randX = (() => window.innerWidth*Math.random(window.innerWidth) * (Math.random() < .5 ? 1 : -1))()
-  let randY = (() => window.innerWidth*Math.random(window.innerWidth) * (Math.random() < .5 ? 1 : -1))()
 
 </script>
 
 <div class="fullScreen passScreen">
   <h1>{ $players[$playerUp].name }, prepare for attack!</h1>
   <button on:click={ () => ready = true }>Ready!</button>
+  {#if ready}<Bomb on:introend={() => $view='board'}/>{/if}
 </div>
-
-{#if ready}
-<img in:fly={{duration: 700, x:randX, y:randY, easing: (t) => t}}
-  on:introend="{() => $view='board'}"
-  class="icon--bomb" src="/icons/bomb.svg" alt="bomb icon"
-  style="height: {bombSize}px; width: {bombSize}px;"
-/>
-{/if}
 
 <style>
   .passScreen{
@@ -61,12 +46,6 @@
     button{
       font-size: 1.5rem;
     }
-  }
-
-  img{
-    position: absolute;
-    left: 0;
-    top: 0;
   }
 
 </style>

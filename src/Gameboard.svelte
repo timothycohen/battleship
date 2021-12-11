@@ -1,44 +1,20 @@
 <script>
   import { fade } from 'svelte/transition'
-  import { view, playerUp, boards, players, boardSize } from './store'
+  import { view, playerUp, boards, players, boardSize, lastAttackLocation, twoPlayerMode } from './store'
 
   let opponent = $playerUp === 1 ? 0 : 1
-  let gameboardPlayer = $boards[$playerUp].getBoard()
-  let gameboardOpponent = $boards[opponent].getBoard()
-  let playerShips = $boards[$playerUp].getShips()
-  let opponentShips = $boards[opponent].getShips()
-
-  let show = false;
-  if (!$players[1].human) show = true;
-
+  let showShips = false;
+  if (!$twoPlayerMode) showShips = true;
   let animate = false;
   let attack = {}
-
-  function checkShip(y, x, player) {
-    if (player === opponent){
-      let ship = opponentShips.find(s => s.id === gameboardOpponent[y][x].ship.id)
-      return ship.inspectShip(gameboardOpponent[y][x].position)
-    }
-
-    let ship = playerShips.find(s => s.id === gameboardPlayer[y][x].ship.id)
-    return ship.inspectShip(gameboardPlayer[y][x].position)
-  }
-
-  function isSunk(y, x, player) {
-    let ship;
-    if (player === opponent){
-      ship = opponentShips.find(s => s.id === gameboardOpponent[y][x].ship.id)
-    } else {
-      ship = playerShips.find(s => s.id === gameboardPlayer[y][x].ship.id)
-    }
-    return ship.isSunk()
-  }
 
   function prepareAttack(e){
     if (animate) return
     attack['boardY'] = +e.target.dataset.y;
     attack['boardX'] = +e.target.dataset.x;
-    attack['hit'] = $boards[opponent].receiveAttack([attack.boardY, attack.boardX])
+    $boards[opponent].receiveAttack([attack.boardY, attack.boardX])
+    attack['hit'] = $boards[opponent].squareStatus([attack.boardY, attack.boardX])
+    $lastAttackLocation = [attack.boardY, attack.boardX]
 
     let hitPosition = e.target.getBoundingClientRect();
     attack['height'] = hitPosition.bottom - hitPosition.top
@@ -50,31 +26,29 @@
 
   function sendAttack(){
     if ($boards[opponent].gameOver()) $view = 'over'
-    else if (attack.hit && isSunk(attack.boardY, attack.boardX, opponent)) $view = 'sunk'
-    else if (attack.hit) $view = 'hit'
+    else if (attack.hit  === 'sunk') $view = 'sunk'
+    else if (attack.hit  === 'hit') $view = 'hit'
     else $view = 'miss'
   }
-
 
 </script>
 
 <div class="gameboard fullScreen">
 
-  <div class="player">
+  <div class="opponent">
     <div class="header">
       <h1>Fire into enemy {$players[opponent].name}'s waters!</h1>
     </div>
 
-    <div class="gameboard__opponent" style="--boardSize: {boardSize}" in:fade>
-      {#each gameboardOpponent as row, y}
+    <div class="gameboard__opponent" style="--boardSize: {boardSize}">
+      {#each $boards[opponent].getBoard() as row, y}
         {#each row as square, x}
 
           {#if square === 'miss'}
             <div class="square missed" data-y={y} data-x={x}>MISS</div>
-          {:else if square !== null && typeof square === 'object' && checkShip(y, x, opponent) & !isSunk(y, x, opponent)}
+          {:else if $boards[opponent].squareStatus([y,x]) === 'hit'}
             <div class="square hit" data-id={square.ship.id} date-shipName={square.ship.name} data-y={y} data-x={x}>HIT</div>
-
-          {:else if square !== null && typeof square === 'object' && isSunk(y, x, opponent)}
+          {:else if $boards[opponent].squareStatus([y,x]) === 'sunk'}
             <div class="square hit" data-id={square.ship.id} date-shipName={square.ship.name} data-y={y} data-x={x}>
               <div class="ship">SUNK</div>
             </div>
@@ -87,29 +61,30 @@
     </div>
   </div>
 
-  <div class="opponent">
+  <div class="player">
     <div class="header">
       <h1>Friendly Waters</h1>
-      {#if $players[1].human}
-        <button class="revealShipBtn" on:click={ () => show = !show }>{show ? 'Conceal' : 'Reveal'} ships</button>
+      {#if $twoPlayerMode}
+        <button class="revealShipBtn" on:click={ () => showShips = !showShips }>{showShips ? 'Conceal' : 'Reveal'} ships</button>
       {/if}
     </div>
 
-    <div class="gameboard__player" style="--boardSize: {boardSize}" in:fade>
-      {#each gameboardPlayer as row, y}
+    <div class="gameboard__player" style="--boardSize: {boardSize}">
+      {#each $boards[$playerUp].getBoard() as row, y}
         {#each row as square, x}
 
           {#if square === 'miss'}
             <div class="square missed" data-y={y} data-x={x}>MISS</div>
-          {:else if square !== null && typeof square === 'object' && checkShip(y, x, $playerUp) && !isSunk(y, x, $playerUp)}
+
+          {:else if $boards[$playerUp].squareStatus([y,x]) === 'hit'}
             <div class="square hit" data-id={square.ship.id} date-shipName={square.ship.name} data-y={y} data-x={x}>HIT</div>
-          {:else if square !== null && typeof square === 'object' && isSunk(y, x, $playerUp)}
+          {:else if $boards[$playerUp].squareStatus([y,x]) === 'sunk'}
             <div class="square hit" data-id={square.ship.id} date-shipName={square.ship.name} data-y={y} data-x={x}>
               <div class="ship">SUNK</div>
             </div>
-          {:else if square !== null && typeof square === "object" && !checkShip(y, x, $playerUp)}
+          {:else if $boards[$playerUp].squareStatus([y,x]) === 'ship'}
             <div class="square">
-              {#if show}<div class="ship"></div>{/if}
+              {#if showShips}<div class="ship"></div>{/if}
             </div>
           {:else}
             <div class="square" data-y={y} data-x={x}></div>

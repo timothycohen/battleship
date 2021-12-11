@@ -1,29 +1,18 @@
 <script>
-  import { view } from './store'
-
-  setTimeout(() => $view = 'pass', 2000);
+  import { fade } from 'svelte/transition'
 
 </script>
 
-<div class="fullScreen sunk" on:click= { () => $view = 'pass' }>
-    <h1>SUNK!!!</h1>
+  <div class="fullScreen sunk">
     <img class="icon--explosion" src="/icons/explosion.svg" alt="explosion icon" />
-    <img class="icon--ship" src="/icons/ship.svg" alt="ship icon" />
-</div>
+    <img in:fade={{duration: 300, easing: (t) => t}} on:introend class="icon--ship" src="/icons/ship.svg" alt="ship icon" />
+  </div>
 
 <style>
 
   .sunk{
     overflow: hidden;
     max-height: 100vh;
-  }
-
-  h1{
-    padding: 2rem 2rem 0 0;
-    font-size: 3rem;
-    width: 100%;
-    text-align: right;
-    z-index: 3;
   }
 
   .icon--explosion{
@@ -70,9 +59,6 @@
 
 
   @media only screen and (min-width: 600px) {
-    h1{
-      font-size: 5rem;
-    }
     .icon--explosion{
       transform: scaleY(1) translateY(0%);
     }
