@@ -9,6 +9,8 @@
   let opponentShips = $boards[opponent].getShips()
 
   let show = false;
+  if (!$players[1].human) show = true;
+
   let animate = false;
   let attack = {}
 
@@ -88,7 +90,9 @@
   <div class="opponent">
     <div class="header">
       <h1>Friendly Waters</h1>
-      <button class="revealShipBtn" on:click={ () => show = !show }>{show ? 'Conceal' : 'Reveal'} ships</button>
+      {#if $players[1].human}
+        <button class="revealShipBtn" on:click={ () => show = !show }>{show ? 'Conceal' : 'Reveal'} ships</button>
+      {/if}
     </div>
 
     <div class="gameboard__player" style="--boardSize: {boardSize}" in:fade>
