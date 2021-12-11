@@ -3,7 +3,8 @@
 - [x] players can place their ships at random
 - [ ] allow second player as computer
 - [x] show/hide toggle for own ships
-- [ ] implement drag/drop instead of click for ship setup
+- [x] allow different sized boards option in the code
+- [ ] make board size player selectable
 
 ### styling:
 - [x] new game form
@@ -22,7 +23,8 @@
 
 ### bugs:
 - [ ] gameboard overflows on very small screens (385px)
-- [ ] if the attacker clicks quickly, they can send multiple attacks on one round. need a flag or debounce function
+- [ ] background doesn't extend to bottom in phone landscape mode
+- [ ] rarely the pass animation plays twice and sends the board to the next player
 
 ### Keywords used in code:
 - DEVTOOL

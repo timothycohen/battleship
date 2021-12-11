@@ -1,56 +1,71 @@
 const { createGameboard } = require('../create-gameboard')
 
-it('creates a board of 10x10 null squares', () =>{
-  let row = [null, null, null, null, null, null, null, null, null, null]
-  expect(createGameboard().getBoard())
-    .toEqual([row, row, row, row, row, row, row, row, row, row])
+it('creates a square board equal to the input integer', () =>{
+  let row8 = [null, null, null, null, null, null, null, null]
+  let row10 = [null, null, null, null, null, null, null, null, null, null]
+  expect(createGameboard(10).getBoard())
+    .toEqual([row10, row10, row10, row10, row10, row10, row10, row10, row10, row10])
+  expect(createGameboard(8).getBoard())
+    .toEqual([row8, row8, row8, row8, row8, row8, row8, row8])
+})
+
+it('throws an error if the argument is not a positive integer greater than 5', () =>{
+  expect(() => createGameboard('10'))
+    .toThrowError('argument must be a positive integer greater than 5')
+    expect(() => createGameboard(0))
+    .toThrowError('argument must be a positive integer greater than 5')
+    expect(() => createGameboard(-8))
+    .toThrowError('argument must be a positive integer greater than 5')
+    expect(() => createGameboard(5))
+    .toThrowError('argument must be a positive integer greater than 5')
 })
 
 test('placeShip throws error if any argument is missing or invalid', () => {
-  expect(() => createGameboard().placeShip([3,2], 'Cruiser'))
+  expect(() => createGameboard(9).placeShip([3,2], 'Cruiser'))
     .toThrowError(`arguments: [int y, int x] position, ship name, 'ver' or 'hor'`)
-  expect(() => createGameboard().placeShip([2], 'Cruiser', 'ver'))
+  expect(() => createGameboard(8).placeShip([2], 'Cruiser', 'ver'))
     .toThrowError(`arguments: [int y, int x] position, ship name, 'ver' or 'hor'`)
-  expect(() => createGameboard().placeShip([2,3,4], 'Cruiser', 'ver'))
+  expect(() => createGameboard(7).placeShip([2,3,4], 'Cruiser', 'ver'))
     .toThrowError(`arguments: [int y, int x] position, ship name, 'ver' or 'hor'`)
-  expect(() => createGameboard().placeShip([2,3], 'Crui', 'ver'))
+  expect(() => createGameboard(10).placeShip([2,3], 'Crui', 'ver'))
     .toThrowError(`arguments: [int y, int x] position, ship name, 'ver' or 'hor'`)
-  expect(() => createGameboard().placeShip([2,3], 'Cruiser', 'vert'))
+  expect(() => createGameboard(10).placeShip([2,3], 'Cruiser', 'vert'))
     .toThrowError(`arguments: [int y, int x] position, ship name, 'ver' or 'hor'`)
 })
 
 test('placeShip throws error if length+position lead to out of bounds', () => {
-  expect(() => createGameboard().placeShip([7,3], 'Battleship', 'ver'))
+  expect(() => createGameboard(8).placeShip([6,3], 'Battleship', 'ver'))
     .toThrowError('out of bounds')
-  expect(() => createGameboard().placeShip([3,9], 'Destroyer', 'hor'))
+  expect(() => createGameboard(10).placeShip([3,9], 'Destroyer', 'hor'))
     .toThrowError('out of bounds')
-  expect(() => createGameboard().placeShip([2,-1], 'Battleship', 'hor'))
+  expect(() => createGameboard(10).placeShip([2,-1], 'Battleship', 'hor'))
     .toThrowError('out of bounds')
 })
 
 test('placeShip correctly updates the board with the player\'s ships', () => {
-  const board1 = createGameboard()
-  board1.placeShip([0,0], 'Destroyer', 'hor')
-  const board2 = createGameboard()
-  board2.placeShip([3,2], 'Destroyer', 'ver')
-  let nullRow = [null, null, null, null, null, null, null, null, null, null]
+  const board8 = createGameboard(8)
+  board8.placeShip([0,0], 'Destroyer', 'hor')
+  const board10 = createGameboard(10)
+  board10.placeShip([3,2], 'Destroyer', 'ver')
+  let nullRow8 = [null, null, null, null, null, null, null, null]
+  let nullRow10 = [null, null, null, null, null, null, null, null, null, null]
 
-  expect(board1.getBoard()[1])
-    .toEqual(nullRow)
-  expect(typeof board1.getBoard()[0][0].ship.id)
+  expect(board8.getBoard()[1])
+    .toEqual(nullRow8)
+  expect(typeof board8.getBoard()[0][0].ship.id)
     .toBe("number")
-  expect(board1.getBoard()[0][0].ship.id === board1.getBoard()[0][1].ship.id)
+  expect(board8.getBoard()[0][0].ship.id === board8.getBoard()[0][1].ship.id)
     .toBe(true)
-  expect(board2.getBoard()[9])
-    .toEqual(nullRow)
-  expect(typeof board2.getBoard()[3][2].ship.id)
+  expect(board10.getBoard()[9])
+    .toEqual(nullRow10)
+  expect(typeof board10.getBoard()[3][2].ship.id)
     .toBe("number")
-  expect(board2.getBoard()[3][2].ship.id === board2.getBoard()[4][2].ship.id)
+  expect(board10.getBoard()[3][2].ship.id === board10.getBoard()[4][2].ship.id)
     .toBe(true)
 })
 
 test('placeShip throws error if spot is already taken', () => {
-  const board = createGameboard()
+  const board = createGameboard(10)
 
   board.placeShip([2,3], 'Submarine', 'ver')
 
@@ -59,12 +74,12 @@ test('placeShip throws error if spot is already taken', () => {
 })
 
 test('placeShip returns true on successful placement of ship', () => {
-  expect(createGameboard().placeShip([2,3], 'Submarine', 'ver'))
+  expect(createGameboard(10).placeShip([2,3], 'Submarine', 'ver'))
     .toBe(true)
 })
 
 test('receivedAttack throws an error if the position is not an array of two integers', () =>{
-  const board = createGameboard();
+  const board = createGameboard(10);
   board.placeShip([3,2], 'Submarine', 'ver')
 
   expect(() => board.receiveAttack([2]))
@@ -76,7 +91,7 @@ test('receivedAttack throws an error if the position is not an array of two inte
 })
 
 test('receivedAttack updates the game board and returns false for a miss', () => {
-  const board = createGameboard();
+  const board = createGameboard(10);
   board.placeShip([3,2], 'Submarine', 'ver')
 
   expect(board.receiveAttack([7,1]))
@@ -88,7 +103,7 @@ test('receivedAttack updates the game board and returns false for a miss', () =>
 })
 
 test('receivedAttack returns true if and only if a ship at the position has been hit for the first time', () => {
-  const board = createGameboard();
+  const board = createGameboard(10);
   board.placeShip([3,2], 'Submarine', 'ver')
   expect(board.receiveAttack([2,2]))
     .toBe(false)
@@ -101,7 +116,7 @@ test('receivedAttack returns true if and only if a ship at the position has been
 })
 
 test('getShips returns an array of all ship objects on the board', () => {
-  const board = createGameboard();
+  const board = createGameboard(10);
   board.placeShip([3,2], 'Submarine', 'ver')
   board.placeShip([6,6], 'Destroyer', 'hor')
 
@@ -115,7 +130,7 @@ test('getShips returns an array of all ship objects on the board', () => {
 // This is not a pure function (uses Math.random)
 // Need to mock to test error thrown or returns false after failing 200 times
 test('placeShipsRandomly places five ships on the board and returns true', () => {
-  const board = createGameboard();
+  const board = createGameboard(9);
   expect(board.placeShipsRandomly())
     .toBe(true)
   expect(board.getShips().length)
@@ -123,7 +138,7 @@ test('placeShipsRandomly places five ships on the board and returns true', () =>
 })
 
 test('removeShip removes a ship from the board if present and returns true', () => {
-  const board = createGameboard();
+  const board = createGameboard(10);
   board.placeShip([3,2], 'Submarine', 'hor')
   board.placeShip([6,4], 'Submarine', 'ver')
   let nullRow = [null, null, null, null, null, null, null, null, null, null]
@@ -145,7 +160,7 @@ test('removeShip removes a ship from the board if present and returns true', () 
   })
 
 test('removeShip returns false if no ship was present at that position', () => {
-  const board = createGameboard();
+  const board = createGameboard(10);
   expect(board.removeShip([999,2]))
     .toBe(false)
   expect(board.removeShip([2,2]))

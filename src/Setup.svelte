@@ -1,77 +1,101 @@
 <script>
   import { createGameboard } from './scripts/create-gameboard'
-  import { boards, view, players } from './store'
+  import { boards, view, players, boardSize } from './store'
   import { fade } from 'svelte/transition'
 
-  // placeShipsRandomly is not a pure function (uses math.random), if it fails after 200 times, it will return false
-  $players.forEach(player => {
-    $boards = [...$boards, createGameboard()]
-  })
+  // create a new gameboard for each player
+  for (let i=0; i<$players.length; i++){
+    $boards = [...$boards, createGameboard(boardSize)]
+  }
 
-  $: finished = shipSelection.reduce((prev, ship) => prev && ship.placed, true)
-
+  // set a current player variable so each player can set their ship one at a time
   let currentPlayer = 0;
 
-  let shipSelection = [
-    {name: 'Carrier', length: 5, placed: false, id: null},
-    {name: 'Battleship', length: 4, placed: false, id: null},
-    {name: 'Cruiser', length: 3, placed: false, id: null},
-    {name: 'Submarine', length: 3, placed: false, id: null},
-    {name: 'Destroyer', length: 2, placed: false, id: null},
+  // one ship from the following menu can be selected for placement on the board
+  let shipSelections = [
+    {name: 'Carrier', length: 5, placed: false, id: null, selected: true},
+    {name: 'Battleship', length: 4, placed: false, id: null, selected: false},
+    {name: 'Cruiser', length: 3, placed: false, id: null, selected: false},
+    {name: 'Submarine', length: 3, placed: false, id: null, selected: false},
+    {name: 'Destroyer', length: 2, placed: false, id: null, selected: false},
   ];
 
+  $: activeShipSelection = shipSelections.find(ship => ship.selected)
+
+  // the ready button is disabled until all ships are placed
+  $: finished = shipSelections.reduce((prev, ship) => prev && ship.placed, true)
+
+  // any time the board is updated, the ship menu selection updates the placed bool and ship id
   $: {
-    shipSelection.forEach(ship => { ship.placed = false; ship.id = null })
+    shipSelections.forEach(ship => { ship.placed = false; ship.id = null })
     const shipsOnBoard = $boards[currentPlayer].getShips()
     shipsOnBoard.forEach(ship => {
-      let option = shipSelection.find(selection => selection.name === ship.name)
+      let option = shipSelections.find(selection => selection.name === ship.name)
       option.placed = true;
       option.id = ship.id
     })
-    shipSelection = shipSelection
+    shipSelections = shipSelections
   }
 
-  let activeSelection = 0;
+  // the placeship function places the actively selected ship onto the board if it hasn't been placed
+  // if there is no space, it shows a warning
+  // it calls a function to select the next unplaced ship, if there is one
   let direction = 'hor';
   let warning = '';
+  let warningPosY = 0;
+  let warningPosX = 0;
 
   function placeShip(e) {
-    if (shipSelection[activeSelection].placed === true) return;
+    if (activeShipSelection.placed) return;
 
     try {
-      $boards[currentPlayer].placeShip([+e.target.dataset.y, +e.target.dataset.x], shipSelection[activeSelection].name, direction)
+      $boards[currentPlayer].placeShip([+e.target.dataset.y, +e.target.dataset.x], activeShipSelection.name, direction)
       $boards = $boards;
-      activeSelection++
-      if (activeSelection === shipSelection.length) activeSelection -= shipSelection.length
+      selectNextUnplacedShip();
     } catch (err) {
-      warning = 'Not enough room!'
+      warningPosY = e.target.getBoundingClientRect().top + window.scrollY
+      warningPosX = e.target.getBoundingClientRect().left + window.scrollX
+      warning = '⚠ No room!'
       setTimeout(() => { warning = '' }, 2000);
     }
   }
 
+  // remove ship removes the ship from the board array. the reactive components handle the DOM and selection menu
+  // if the board was finished, it makes the active selection the removed ship
   function removeShip(e) {
     const data = e.target.closest('.square').dataset
-    let board = $boards[currentPlayer]
+    const board = $boards[currentPlayer]
+
     board.removeShip([+data.y, +data.x])
     $boards[currentPlayer] = board
+
+    shipSelections.forEach(option => {
+      option.selected = false;
+      if (option.name === data.name) option.selected = true;
+    })
   }
 
+  // placeShipsRandomly is not a pure function (uses math.random), if it fails after 200 times, it will return false
+  // the reactive components handle the DOM and selection menu
   function placeAllShips() {
-    let tempBoard = createGameboard()
+    let tempBoard = createGameboard(boardSize)
     tempBoard.placeShipsRandomly()
-
-    // update the id of the ship in ship selection
     $boards[currentPlayer] = tempBoard;
   }
 
+  // reset the board array. the reactive components handle the DOM and selection menu
   function clear() {
-    let tempBoard = createGameboard()
+    let tempBoard = createGameboard(boardSize)
     $boards[0] = tempBoard;
   }
 
+  // moves to the next view after all humans have placed their ships
   function finish() {
     if (currentPlayer === 0 && $players[1].human) {
       currentPlayer = 1;
+      shipSelections.forEach(ship => ship.selected = false)
+      shipSelections[0].selected = true
+      shipSelections = shipSelections
     } else if (currentPlayer === 0 && !$players[1].human) {
       currentPlayer = 1;
       placeAllShips()
@@ -81,36 +105,100 @@
     }
   }
 
+  function selectClickedShip(e) {
+    let option = e.target.closest('.optionName')
+    if (option.dataset.placed === 'true') return
+    if (option.dataset.selected === 'true') return
+
+    shipSelections.forEach(ship => {
+      if (ship.name !== option.dataset.name) ship.selected = false
+      else ship.selected = true;
+    })
+      shipSelections = shipSelections
+  }
+
+  function selectNextUnplacedShip() {
+    let shipIndex = shipSelections.indexOf(shipSelections.find(ship => ship.selected))
+    shipSelections.forEach(ship => ship.selected = false)
+    for(let i=0; i<shipSelections.length; i++){
+      shipIndex++
+      if (shipIndex === shipSelections.length) shipIndex -= shipSelections.length
+      if (!shipSelections[shipIndex].placed) return shipSelections[shipIndex].selected = true
+    }
+    shipSelections[shipIndex].selected = true
+  }
+
 </script>
 
-<div class="fullScreen setup">
+<div in:fade class="fullScreen setup">
 
-  <div class='warning'>{warning}</div>
+  <h1 class="instruction">{$players[currentPlayer].name}, place your ships!</h1>
 
-  <button on:click={placeAllShips}>Place Randomly!</button>
+  <div class="shipSelectionContainer">
 
-  <ul class="shipSelection">
-    {#each shipSelection as { name, length, placed }, i}
-      <li
-        class="{i === activeSelection ? "active" : ""}"
-        class:placed
-        on:click={() => activeSelection = i}
-      >
-        {name} length: {length}
-      </li>
-    {/each}
-  </ul>
+    <ul class="shipSelections">
+      {#each shipSelections as { name, length, placed, selected } }
+        <li class="optionName"
+          data-name={name}
+          data-placed={placed}
+          class:selected
+          class:placed
+          on:click={selectClickedShip}
+        >
+          {name} <ul class:placed>{#each Array(length) as _, i}<li></li>{/each}</ul>
+        </li>
+      {/each}
+    </ul>
 
-  <button on:click={() => direction = direction === 'ver' ? 'hor' : 'ver'}>
-    {#if direction === 'ver'}Horizontal{:else}Vertical{/if}
-  </button>
+    <div class="optionsContainer">
+      <button class="directionBtn" on:click={() => direction = direction === 'ver' ? 'hor' : 'ver'}>
+        {#if direction === 'ver'}
+          <img class="icon--hor" src="/icons/hor.svg" alt="horizontal icon"/>
+          Horizontal
+        {:else}
+          <img class="icon--ver" src="/icons/ver.svg" alt="vertical icon"/>
+          Vertical
+        {/if}
 
-  <div class="gameboard__setup" in:fade>
+      </button>
+
+      <button class="randomBtn" on:click={placeAllShips}>
+        <img class="icon--random" src="/icons/random.svg" alt="random icon"/>
+        Random
+      </button>
+      <button class="clearBtn" on:click={clear}>
+        <img class="icon--clear" src="/icons/clear.svg" alt="clear icon"/>
+        Clear All
+        </button>
+    </div>
+
+    <div class="selectionExample">
+      {#if finished}
+        <button class="finishedBtn" disabled={!finished} on:click={finish}>Ready!</button>
+      {:else}
+        {#each shipSelections as ship }
+          {#if ship.selected}
+            <div class="selectionExample--name">{ship.name}</div>
+            <ul class="selectionExample--icons {direction === 'ver' ? 'vertical' : ''}">
+              {#each Array(ship.length) as _, i}
+                <li></li>
+              {/each}
+            </ul>
+          {/if}
+        {/each}
+      {/if}
+    </div>
+
+  </div>
+
+  <div class="gameboard__setup" style="--boardSize: {boardSize}">
+    <div class='warning' style="--top: {warningPosY}px; --left: {warningPosX}px;">{warning}</div>
+
     {#each $boards[currentPlayer].getBoard() as row, y}
       {#each row as square, x}
 
         {#if square !== null && typeof square === "object"}
-          <div on:click={removeShip} class="square" data-id={square.ship.id} date-shipName={square.ship.name} data-y={y} data-x={x}><div class="ship"></div></div>
+          <div on:click={removeShip} class="square" data-name={square.ship.name} data-y={y} data-x={x}><div class="ship"></div></div>
         {:else}
           <div on:click={placeShip} class="square open" data-y={y} data-x={x}></div>
         {/if}
@@ -118,9 +206,6 @@
       {/each}
     {/each}
   </div>
-
-  <button disabled={!finished} on:click={finish}>ready to play</button>
-  <button on:click={clear}>clear ships</button>
 
 </div>
 
@@ -130,10 +215,163 @@
   padding: 1rem;
 }
 
+.instruction{
+  text-align: center;
+  font-size: 2.5rem;
+}
+
+/* #################### SHIP SELECTION #################### */
+
+.shipSelectionContainer{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  height: 15rem;
+  width: 100%;
+}
+
+.shipSelections{
+  min-height: 12rem;
+  min-width: 12rem;
+  background-color: var(--bluedarken40);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.shipSelections li{
+  font-size: 1.5rem;
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--bluelighten90);
+}
+
+.shipSelections li:hover{
+  box-shadow: 0 5px 5px -7px var(--gold);
+}
+
+.shipSelections > li > ul{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.shipSelections > li > ul > li{
+  width: 2rem;
+  height: 2rem;
+  background: url(/icons/ship.svg) no-repeat center;
+  background-size: contain;
+}
+
+.shipSelections .selected{
+  color: var(--gold);
+  box-shadow: none;
+}
+
+.shipSelections .placed, .placed li{
+  color: gray;
+  opacity: 75%;
+  cursor: default;
+  font-weight: lighter;
+}
+
+.shipSelections, .optionsContainer, .selectionExample{
+  background-color: var(--bluedarken40);
+  min-height: 12rem;
+  min-width: 12rem;
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px -7px var(--bluedarken70);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.selectionExample{
+  justify-content: center;
+}
+
+.selectionExample--name{
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bolder;
+  text-align: center;
+}
+
+.finishedBtn{
+  color: white;
+  padding: .75rem 1rem;
+  font-size: 1.5rem;
+  font-weight: bolder;
+  box-shadow: 0 5px 15px -7px var(--gold);
+}
+
+.finishedBtn:hover{
+  box-shadow: 0 5px 15px 0px var(--gold);
+}
+
+.selectionExample--icons{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selectionExample--icons.vertical{
+  flex-direction: column;
+}
+
+.selectionExample--icons li{
+  width: 2rem;
+  height: 2rem;
+  background: url(/icons/ship.svg) no-repeat center;
+  background-size: contain;
+  list-style: none;
+}
+
+/* #################### OPTION BUTTONS #################### */
+
+.directionBtn,
+.randomBtn,
+.clearBtn{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem 1rem;
+}
+
+.directionBtn:hover,
+.randomBtn:hover,
+.clearBtn:hover{
+  box-shadow: 0 5px 15px -7px var(--gold);
+}
+
+/* #################### BOARD #################### */
+.warning{
+  position: absolute;
+  font-size: 1.5rem;
+  text-align: center;
+  color: var(--gold);
+  top: var(--top);
+  left: var(--left);
+  background-color: var(--bluelighten90);
+  opacity: .8;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px -7px var(--grayshadow);
+}
+
 .gameboard__setup{
   display: grid;
-  grid-template-columns: repeat(10, auto);
-  grid-template-rows: repeat(10, auto);
+  grid-template-columns: repeat(var(--boardSize), auto);
+  grid-template-rows: repeat((--boardSize), auto);
   border: 1rem solid var(--gold);
 }
 
@@ -164,20 +402,4 @@
   cursor: pointer;
 }
 
-li{
-  list-style: none;
-  cursor: pointer;
-}
-
-.active{
-  color: green;
-}
-
-.placed{
-  color: gray;
-}
-
-button:disabled{
-  color: gray;
-}
 </style>

@@ -8,8 +8,10 @@ on each turn the player can view their gameboard with ship, hit ship, sunk ship,
 they can also view their opponent's gameboard with everything except the ships viewable
 */
 
-const createGameboard = (() => {
-  const GRIDSIZE = 10;
+const createGameboard = ((size) => {
+  if(size<6 || !Number.isInteger(size)) throw Error('argument must be a positive integer greater than 5')
+
+  const GRIDSIZE = size;
   const VALIDNAMES = ['Destroyer', 'Submarine', 'Cruiser', 'Battleship', 'Carrier'];
 
   let ships = [];
@@ -123,7 +125,7 @@ const createGameboard = (() => {
       } catch (err) {
         count++
         if (err.message !== 'ships cannot overlap'
-          && err.message !== 'out of bounds. max grid size is 10') {
+          && err.message !== `out of bounds. max grid size is ${GRIDSIZE}`) {
           throw(err)
         }
       }

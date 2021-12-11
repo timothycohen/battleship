@@ -22,8 +22,8 @@
   }
 
   // DEVTOOL : seed players
-  // player1Name = 'Jane';
-  // player2Name = 'Joe';
+  player1Name = 'Jane';
+  player2Name = 'Joe';
   // twoPlayer = false
   // startGame();
 
@@ -31,9 +31,9 @@
 
 <div class="bg"/>
 {#if bgLoaded}
-<div in:fade="{{ duration: 1500 }}" class="bgImg"></div>
+<div in:fade="{{ duration: 1000 }}" class="bgImg"></div>
 
-<div class="startGame" in:fade="{{ delay: 500, duration: 1000 }}">
+<div class="startGame" in:fade="{{ delay: 300, duration: 700 }}">
   <div class="header">
     <h1>Battleship</h1>
     <img class="icon--cannon" src="/favicon.svg" alt="cannon icon"/>
@@ -69,7 +69,7 @@
     left: 0;
     top: 0;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
   }
 
   .bg{

@@ -29,7 +29,7 @@ it('throws an error if not a valid name', () => {
     .toThrowError('valid names are Destroyer, Submarine, Cruiser, Battleship, Carrier')
   expect(() => createShip('Carrierr'))
     .toThrowError('valid names are Destroyer, Submarine, Cruiser, Battleship, Carrier')
-  });
+});
 
 it('creates a ship with length according to the name', () => {
   const ship2 = createShip('Destroyer')

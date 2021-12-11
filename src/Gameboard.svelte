@@ -1,6 +1,6 @@
 <script>
   import { fade } from 'svelte/transition'
-  import { view, playerUp, boards, players } from './store'
+  import { view, playerUp, boards, players, boardSize } from './store'
 
   let opponent = $playerUp === 1 ? 0 : 1
   let gameboardPlayer = $boards[$playerUp].getBoard()
@@ -33,6 +33,7 @@
   }
 
   function prepareAttack(e){
+    if (animate) return
     attack['boardY'] = +e.target.dataset.y;
     attack['boardX'] = +e.target.dataset.x;
     attack['hit'] = $boards[opponent].receiveAttack([attack.boardY, attack.boardX])
@@ -62,7 +63,7 @@
       <h1>Send an attack to {$players[opponent].name}'s board!</h1>
     </div>
 
-    <div class="gameboard__opponent" in:fade>
+    <div class="gameboard__opponent" style="--boardSize: {boardSize}" in:fade>
       {#each gameboardOpponent as row, y}
         {#each row as square, x}
 
@@ -90,7 +91,7 @@
       <button on:click={ () => show = !show }>{show ? 'Hide' : 'Show'} ships</button>
     </div>
 
-    <div class="gameboard__player" in:fade>
+    <div class="gameboard__player" style="--boardSize: {boardSize}" in:fade>
       {#each gameboardPlayer as row, y}
         {#each row as square, x}
 
@@ -145,8 +146,8 @@
 
 .gameboard__opponent, .gameboard__player{
   display: grid;
-  grid-template-columns: repeat(10, auto);
-  grid-template-rows: repeat(10, auto);
+  grid-template-columns: repeat(var(--boardSize), auto);
+  grid-template-rows: repeat((--boardSize), auto);
   border: 1rem solid var(--gold);
 }
 
