@@ -80,23 +80,19 @@
       {#each $boards[$playerUp].getBoard() as row, y}
         {#each row as square, x}
           {#if square === 'miss'}
-            <div class="square missed" data-y={y} data-x={x}>
-              {#if attackedY === y && attackedX === x }<div class="lastAttack"></div>{/if}
+            <div class="square missed {attackedY === y ? (attackedX === x ? 'lastAttack' : '') : ''}" data-y={y} data-x={x}>
               MISS
             </div>
           {:else if $boards[$playerUp].squareStatus([y,x]) === 'hit'}
-            <div class="square hit" data-id={square.ship.id} date-shipName={square.ship.name} data-y={y} data-x={x}>
-              {#if attackedY === y && attackedX === x }<div class="lastAttack"></div>{/if}
+            <div class="square hit {attackedY === y ? (attackedX === x ? 'lastAttack' : '') : ''}" data-id={square.ship.id} date-shipName={square.ship.name} data-y={y} data-x={x}>
               HIT
             </div>
           {:else if $boards[$playerUp].squareStatus([y,x]) === 'sunk'}
-            <div class="square hit" data-id={square.ship.id} date-shipName={square.ship.name} data-y={y} data-x={x}>
-              {#if attackedY === y && attackedX === x }<div class="lastAttack"></div>{/if}
+            <div class="square hit {attackedY === y ? (attackedX === x ? 'lastAttack' : '') : ''}" data-id={square.ship.id} date-shipName={square.ship.name} data-y={y} data-x={x}>
               <div class="ship">SUNK</div>
             </div>
           {:else if $boards[$playerUp].squareStatus([y,x]) === 'ship'}
-            <div class="square">
-              {#if attackedY === y && attackedX === x }<div class="lastAttack"></div>{/if}
+            <div class="square {attackedY === y ? (attackedX === x ? 'lastAttack' : '') : ''}">
               {#if showShips}<div class="ship"></div>{/if}
             </div>
           {:else}
@@ -214,19 +210,14 @@ button:hover{
 }
 
 .lastAttack{
-  animation: lastAttack 2s forwards;
+  animation: lastAttack 5s forwards;
   width: 100%;
   height: 100%;
-  background-color: white;
 }
 
 @keyframes lastAttack{
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
+  0%, 40%, 100% { box-shadow: none }
+  20%, 60%, 80% { box-shadow: 0 0 5px 5px red inset; }
 }
 
 </style>
