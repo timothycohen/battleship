@@ -15,7 +15,6 @@
   }
 
   function pass() {
-    console.log('passed')
     $playerUp = $playerUp === 0 ? 1 : 0;
     if ($twoPlayerMode) $view = 'pass'
     else if ($playerUp === 0) $view = 'board'

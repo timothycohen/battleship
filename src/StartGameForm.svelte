@@ -22,7 +22,7 @@
   // DEVTOOL : seed players
   player1Name = 'Jane';
   player2Name = 'Joe';
-  // $twoPlayerMode = false
+  $twoPlayerMode = false
   startGame();
 
 </script>

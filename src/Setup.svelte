@@ -130,8 +130,8 @@
   // DEVTOOL : seed board
   placeAllShips()
   finish()
-  placeAllShips()
-  finish()
+  // placeAllShips()
+  // finish()
 
 </script>
 

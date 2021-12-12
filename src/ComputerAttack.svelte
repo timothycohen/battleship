@@ -11,6 +11,8 @@
   }
 
   function sendRandomAttack() {
+    if ($view !== 'computerAttack') return
+
     getUnattackedPos()
     $lastAttackLocation = pos;
     $boards[0].receiveAttack(pos)
@@ -25,7 +27,7 @@
 </script>
 
 <div class="fullScreen passScreen">
-  <h1>{ $players[$playerUp].name } is attacking!</h1>
+  <h1>{ $players[$playerUp].name } is returning fire!</h1>
   <Bomb on:introend={sendRandomAttack}/>
 </div>
 

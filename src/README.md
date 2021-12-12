@@ -4,9 +4,9 @@
 - [x] allow second player as computer
 - [x] show/hide toggle for own ships
 - [x] allow different sized boards option in the code
-- [ ] make board size player selectable
-- [ ] hovering over suitable spots on the setup board should highlight them
-- [ ] make the computer smarter than just choosing random unattacked squares
+- [ ] make board size player selectable (it's already set up. just have to give the user the option to select an integer)
+- [ ] hovering over suitable spots on the setup board should highlight them (can modify the placeShip function to return a bool if it's possible at that space)
+- [ ] make the computer smarter than just choosing random unattacked squares (scan the board for hits and choose a space one away)
 
 ### styling:
 - [x] new game form
@@ -28,7 +28,6 @@
 ### bugs:
 - [ ] gameboard overflows on very small screens (385px)
 - [ ] background doesn't extend to bottom in phone landscape mode
-- [ ] if the transition speed of the pass bomb animation is too fast (700ms), it plays twice and sends the board to the next player
 
 ### improvements:
 - [ ] playerUp should be the actual player object not the index

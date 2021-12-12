@@ -4,12 +4,18 @@
 
   let ready = false;
 
+  function goToBoard() {
+    if (!ready) return
+    if ($view !== 'pass') return
+    $view = 'board'
+  }
+
 </script>
 
-<div class="fullScreen passScreen noOverflow">
+<div class="fullScreen passScreen noOverflow" on:click={goToBoard}>
   <h1>{ $players[$playerUp].name }, prepare for attack!</h1>
-  <button on:click={ () => ready = true }>Ready!</button>
-  {#if ready}<Bomb on:introend={() => $view='board'}/>{/if}
+  <button on:click|stopPropagation={() => ready = true}>Ready!</button>
+  {#if ready}<Bomb on:introend={goToBoard}/>{/if}
 </div>
 
 <style>

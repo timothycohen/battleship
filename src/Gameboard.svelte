@@ -8,6 +8,13 @@
   let animate = false;
   let attack = {}
 
+  let attackedY;
+  let attackedX;
+  if ($lastAttackLocation.length) {
+    attackedY = $lastAttackLocation[0]
+    attackedX = $lastAttackLocation[1]
+  }
+
   function prepareAttack(e){
     if (animate) return
     attack['boardY'] = +e.target.dataset.y;
@@ -72,18 +79,24 @@
     <div class="gameboard__player" style="--boardSize: {boardSize}">
       {#each $boards[$playerUp].getBoard() as row, y}
         {#each row as square, x}
-
           {#if square === 'miss'}
-            <div class="square missed" data-y={y} data-x={x}>MISS</div>
-
+            <div class="square missed" data-y={y} data-x={x}>
+              {#if attackedY === y && attackedX === x }<div class="lastAttack"></div>{/if}
+              MISS
+            </div>
           {:else if $boards[$playerUp].squareStatus([y,x]) === 'hit'}
-            <div class="square hit" data-id={square.ship.id} date-shipName={square.ship.name} data-y={y} data-x={x}>HIT</div>
+            <div class="square hit" data-id={square.ship.id} date-shipName={square.ship.name} data-y={y} data-x={x}>
+              {#if attackedY === y && attackedX === x }<div class="lastAttack"></div>{/if}
+              HIT
+            </div>
           {:else if $boards[$playerUp].squareStatus([y,x]) === 'sunk'}
             <div class="square hit" data-id={square.ship.id} date-shipName={square.ship.name} data-y={y} data-x={x}>
+              {#if attackedY === y && attackedX === x }<div class="lastAttack"></div>{/if}
               <div class="ship">SUNK</div>
             </div>
           {:else if $boards[$playerUp].squareStatus([y,x]) === 'ship'}
             <div class="square">
+              {#if attackedY === y && attackedX === x }<div class="lastAttack"></div>{/if}
               {#if showShips}<div class="ship"></div>{/if}
             </div>
           {:else}
@@ -198,6 +211,22 @@ button{
 
 button:hover{
   background-color: var(--bluelighten50);
+}
+
+.lastAttack{
+  animation: lastAttack 2s forwards;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+
+@keyframes lastAttack{
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 </style>
