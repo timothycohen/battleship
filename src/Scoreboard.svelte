@@ -16,6 +16,7 @@
     return total;
   }, 0)
 
+  // DEVTOOL : seed attacks
   $boards[1].receiveAttack([3,0])
   $boards[1].receiveAttack([3,1])
   $boards[1].receiveAttack([3,2])
@@ -101,7 +102,7 @@
     align-items: center;
     justify-content: space-around;
     flex-wrap: wrap;
-    margin: 1rem;
+    margin-top: 1rem;
     gap: 2rem;
   }
 
