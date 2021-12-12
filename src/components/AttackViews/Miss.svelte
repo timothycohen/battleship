@@ -1,15 +1,15 @@
 <script>
-  import { fade } from 'svelte/transition'
+  import { onMount } from 'svelte'
+  import { createEventDispatcher } from 'svelte'
 
+	const dispatch = createEventDispatcher();
+
+  onMount( () => dispatch('mounted') )
 </script>
 
-    <img in:fade={{duration: 300, easing: (t) => t}}
-      on:introend
-      class="icon--splash" src="/icons/splash.svg" alt="splash icon"
-    />
+  <img class="icon--splash" src="/icons/splash.svg" alt="splash icon" />
 
 <style>
-
   .icon--splash{
     position: absolute;
     bottom: 0;

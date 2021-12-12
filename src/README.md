@@ -12,13 +12,15 @@
 - [x] new game form
 - [x] icons (ship, hit, miss, sunk) on gameboard
 - [x] attack animation on gameboard
-- [x] miss animation
-- [ ] represent ships across multiple squares instead of individual spaces
-- [ ] scoreboard
-- [ ] hit animation
-- [ ] sink animation
-- [ ] gameover animation
+- [x] miss view
+- [x] hit animation
+- [x] sink animation
+- [x] gameover view
+- [x] scoreboard
 - [ ] check on multiple screen sizes
+- [ ] represent ships across multiple squares instead of individual spaces
+- [ ] sounds
+- [ ] show last attack position
 
 ### testing:
 - [ ] placeShipsRandomly is not a pure function. need to mock for timeout/thrown error

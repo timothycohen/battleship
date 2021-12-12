@@ -1,6 +1,6 @@
 <script>
   import { createPlayer } from './scripts/create-player'
-  import { players, view, playerUp, twoPlayerMode } from './store'
+  import { players, view, twoPlayerMode } from './store'
   import { fade } from 'svelte/transition'
   import { onMount } from 'svelte'
 
@@ -16,7 +16,6 @@
     let isHuman = [true, $twoPlayerMode];
 
     $players = playerNames.map((name, i) => createPlayer(name, isHuman[i]));
-    $playerUp = 0;
     $view = 'setup'
   }
 
@@ -24,7 +23,7 @@
   player1Name = 'Jane';
   player2Name = 'Joe';
   // $twoPlayerMode = false
-  // startGame();
+  startGame();
 
 </script>
 
@@ -116,7 +115,6 @@
     display: grid;
     grid-template-columns: auto auto;
     grid-template-rows: auto auto auto;
-    /* box-shadow: 0 5px 15px -7px var(--grayshadow); */
     box-shadow: 0px 0px 10px 5px var(--gold);
   }
 
@@ -131,7 +129,6 @@
     padding: .3rem;
     font-size: .75rem;
     border-radius: 3px;
-    /* border-color: transparent; */
   }
 
   .newGameBtn{

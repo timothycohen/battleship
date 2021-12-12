@@ -1,18 +1,71 @@
 <script>
   import { players, playerUp, boards } from './store'
 
-  let player0Ships = $boards[0].getShips()
-  let player1Ships = $boards[1].getShips()
+  $: player0Ships = $boards[0].getShips()
+  $: player1Ships = $boards[1].getShips()
+  $: player0Active = player0Ships.length - player0ShipsSunk
+  $: player1Active = player1Ships.length - player1ShipsSunk
 
-  let player0ShipsSunk = $boards[0].getShips().reduce((total, currentShip) => {
+  $: player0ShipsSunk = $boards[0].getShips().reduce((total, currentShip) => {
     if (currentShip.isSunk()) total++
     return total;
   }, 0)
 
-  let player1ShipsSunk = $boards[1].getShips().reduce((total, currentShip) => {
+  $: player1ShipsSunk = $boards[1].getShips().reduce((total, currentShip) => {
     if (currentShip.isSunk()) total++
     return total;
   }, 0)
+
+  $boards[1].receiveAttack([3,0])
+  $boards[1].receiveAttack([3,1])
+  $boards[1].receiveAttack([3,2])
+  $boards[1].receiveAttack([3,3])
+  $boards[1].receiveAttack([3,4])
+  $boards[1].receiveAttack([3,5])
+  $boards[1].receiveAttack([3,6])
+  $boards[1].receiveAttack([3,7])
+  $boards[1].receiveAttack([3,8])
+
+  $boards[1].receiveAttack([4,0])
+  $boards[1].receiveAttack([4,1])
+  $boards[1].receiveAttack([4,2])
+  $boards[1].receiveAttack([4,3])
+  $boards[1].receiveAttack([4,4])
+  $boards[1].receiveAttack([4,5])
+  $boards[1].receiveAttack([4,6])
+  $boards[1].receiveAttack([4,7])
+  $boards[1].receiveAttack([4,8])
+
+  $boards[1].receiveAttack([5,0])
+  $boards[1].receiveAttack([5,1])
+  $boards[1].receiveAttack([5,2])
+  $boards[1].receiveAttack([5,3])
+  $boards[1].receiveAttack([5,4])
+  $boards[1].receiveAttack([5,5])
+  $boards[1].receiveAttack([5,6])
+  $boards[1].receiveAttack([5,7])
+  $boards[1].receiveAttack([5,8])
+
+  $boards[1].receiveAttack([6,0])
+  $boards[1].receiveAttack([6,1])
+  $boards[1].receiveAttack([6,2])
+  $boards[1].receiveAttack([6,3])
+  $boards[1].receiveAttack([6,4])
+  $boards[1].receiveAttack([6,5])
+  $boards[1].receiveAttack([6,6])
+  $boards[1].receiveAttack([6,7])
+  $boards[1].receiveAttack([6,8])
+
+  $boards[1].receiveAttack([7,0])
+  $boards[1].receiveAttack([7,1])
+  $boards[1].receiveAttack([7,2])
+  $boards[1].receiveAttack([7,3])
+  $boards[1].receiveAttack([7,4])
+  $boards[1].receiveAttack([7,5])
+  $boards[1].receiveAttack([7,6])
+  $boards[1].receiveAttack([7,7])
+  $boards[1].receiveAttack([7,8])
+
 
 </script>
 
@@ -23,7 +76,7 @@
       {$players[0].name}
     </div>
     <div class="details">
-      Active: {player0Ships.length - player0ShipsSunk}
+      <span class="{player0Active === 1 ? 'danger' : ''}">Active: {player0Active}</span>
       Sunk: {player0ShipsSunk}
     </div>
   </div>
@@ -33,8 +86,8 @@
       {$players[1].name}
     </div>
     <div class="details">
-      active: {player1Ships.length - player1ShipsSunk}
-      sunk: {player1ShipsSunk}
+      <span class="{player1Active === 1 ? 'danger' : ''}">Active: {player1Active}</span>
+      Sunk: {player1ShipsSunk}
     </div>
   </div>
 
@@ -64,11 +117,16 @@
     padding: 1rem;
     color: var(--bluedarken70);
     box-shadow: 0 5px 15px -7px var(--grayshadow);
+    font-size: 1.2rem;
   }
 
   .active{
-    transform: scale(1.3);
+    font-size: 1.5rem;
     box-shadow: 0 5px 15px -7px var(--gold);
+  }
+
+  .danger{
+    color: red;
   }
 
 </style>

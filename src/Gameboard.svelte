@@ -196,4 +196,8 @@ button{
   font-size: 1.5rem;
 }
 
+button:hover{
+  background-color: var(--bluelighten50);
+}
+
 </style>

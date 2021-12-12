@@ -15,6 +15,7 @@
   }
 
   function pass() {
+    console.log('passed')
     $playerUp = $playerUp === 0 ? 1 : 0;
     if ($twoPlayerMode) $view = 'pass'
     else if ($playerUp === 0) $view = 'board'
@@ -24,25 +25,22 @@
 </script>
 
 {#if type==="over"}
-  <div class="fullScreen">
-    <h1>Game Over!!!</h1>
-    <GameOver/>
-  </div>
+  <GameOver/>
 {:else}
-  <div class="fullScreen" on:click={pass}>
+  <div class="fullScreen noOverflow" on:click={pass}>
     {#if type === 'hit'}
       <h1>Hit!!!</h1>
-      <Hit on:introend={delayAndPass}/>
+      <Hit on:mounted={delayAndPass}/>
     {/if}
 
     {#if type === 'miss'}
       <h1>Miss!!!</h1>
-      <Miss on:introend={delayAndPass}/>
+      <Miss on:mounted={delayAndPass}/>
     {/if}
 
     {#if type === 'sunk'}
       <h1>SUNK!!!</h1>
-      <Sunk on:introend={delayAndPass}/>
+      <Sunk on:mounted={delayAndPass}/>
     {/if}
   </div>
 {/if}
@@ -50,17 +48,18 @@
 <style>
 
 h1{
-    padding: 2rem 2rem 0 0;
-    font-size: 3rem;
-    width: 100%;
-    text-align: right;
-    z-index: 5;
-    color: var(--bluedarken70);
-  }
-
-@media only screen and (min-width: 600px) {
-  h1{
-    font-size: 5rem;
-  }
+  padding: 2rem 2rem 0 0;
+  font-size: 5rem;
+  width: 100%;
+  text-align: right;
+  z-index: 5;
+  color: var(--bluedarken70);
+  position: absolute;
 }
+
+.noOverflow{
+  overflow: hidden;
+  position: relative;
+}
+
 </style>

@@ -11,6 +11,7 @@
 </script>
 
 <main>
+
   {#if $view === 'new'}
     <StartGameForm />
   {:else if $view === 'setup'}
@@ -22,16 +23,8 @@
     <PassScreen />
   {:else if $view === 'computerAttack'}
     <ComputerAttack />
-  {:else if $view === 'sunk'}
-    <AttackFeedback type='sunk'/>
-  {:else if $view === 'miss'}
-    <AttackFeedback type='miss'/>
-  {:else if $view === 'hit'}
-    <AttackFeedback type='hit'/>
-  {:else if $view === 'over'}
-    <AttackFeedback type='over'/>
+  {:else if $view === 'sunk' || $view === 'miss' || $view === 'hit' || $view === 'over'}
+    <AttackFeedback type={$view}/>
   {/if}
-</main>
 
-<style>
-</style>
+</main>

@@ -6,7 +6,7 @@
 
 </script>
 
-<div class="fullScreen passScreen">
+<div class="fullScreen passScreen noOverflow">
   <h1>{ $players[$playerUp].name }, prepare for attack!</h1>
   <button on:click={ () => ready = true }>Ready!</button>
   {#if ready}<Bomb on:introend={() => $view='board'}/>{/if}
@@ -21,11 +21,16 @@
     text-align: center;
     overflow: hidden;
     max-height: 100vh;
+    gap: 3rem;
+  }
+
+  h1{
+    font-size: 5rem;
   }
 
   button{
     width: 80%;
-    font-size: .75rem;
+    font-size: 1.5rem;
     height: 3rem;
     border: 1px solid var(--bluelighten90);
     background-color: var(--bluedarken70);
@@ -39,13 +44,9 @@
     border: 1px solid white;
   }
 
-  @media only screen and (min-width: 600px) {
-    h1{
-      font-size: 5rem;
-    }
-    button{
-      font-size: 1.5rem;
-    }
+  .noOverflow{
+    overflow: hidden;
+    position: relative;
   }
 
 </style>

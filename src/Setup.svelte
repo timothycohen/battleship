@@ -1,15 +1,12 @@
 <script>
   import { createGameboard } from './scripts/create-gameboard'
-  import { boards, view, players, boardSize, twoPlayerMode } from './store'
+  import { boards, view, players, boardSize, twoPlayerMode, playerUp } from './store'
   import { fade } from 'svelte/transition'
 
   // create a new gameboard for each player
   for (let i=0; i<$players.length; i++){
     $boards = [...$boards, createGameboard(boardSize)]
   }
-
-  // set a current player variable so each player can set their ship one at a time
-  let currentPlayer = 0;
 
   // one ship from the following menu can be selected for placement on the board
   let shipSelections = [
@@ -28,7 +25,7 @@
   // any time the board is updated, the ship menu selection updates the placed bool and ship id
   $: {
     shipSelections.forEach(ship => { ship.placed = false; ship.id = null })
-    const shipsOnBoard = $boards[currentPlayer].getShips()
+    const shipsOnBoard = $boards[$playerUp].getShips()
     shipsOnBoard.forEach(ship => {
       let option = shipSelections.find(selection => selection.name === ship.name)
       option.placed = true;
@@ -49,7 +46,7 @@
     if (activeShipSelection.placed) return;
 
     try {
-      $boards[currentPlayer].placeShip([+e.target.dataset.y, +e.target.dataset.x], activeShipSelection.name, direction)
+      $boards[$playerUp].placeShip([+e.target.dataset.y, +e.target.dataset.x], activeShipSelection.name, direction)
       $boards = $boards;
       selectNextUnplacedShip();
     } catch (err) {
@@ -64,10 +61,10 @@
   // if the board was finished, it makes the active selection the removed ship
   function removeShip(e) {
     const data = e.target.closest('.square').dataset
-    const board = $boards[currentPlayer]
+    const board = $boards[$playerUp]
 
     board.removeShip([+data.y, +data.x])
-    $boards[currentPlayer] = board
+    $boards[$playerUp] = board
 
     shipSelections.forEach(option => {
       option.selected = false;
@@ -80,7 +77,7 @@
   function placeAllShips() {
     let tempBoard = createGameboard(boardSize)
     tempBoard.placeShipsRandomly()
-    $boards[currentPlayer] = tempBoard;
+    $boards[$playerUp] = tempBoard;
   }
 
   // reset the board array. the reactive components handle the DOM and selection menu
@@ -91,16 +88,18 @@
 
   // moves to the next view after all humans have placed their ships
   function finish() {
-    if (currentPlayer === 0 && $twoPlayerMode) {
-      currentPlayer = 1;
+    if ($playerUp === 0 && $twoPlayerMode) {
+      $playerUp = 1;
       shipSelections.forEach(ship => ship.selected = false)
       shipSelections[0].selected = true
       shipSelections = shipSelections
-    } else if (currentPlayer === 0 && !$twoPlayerMode) {
-      currentPlayer = 1;
+    } else if ($playerUp === 0 && !$twoPlayerMode) {
+      $playerUp = 1;
       placeAllShips()
+      $playerUp = 0;
       $view = 'board'
     } else {
+      $playerUp = 0;
       $view = 'pass'
     }
   }
@@ -129,17 +128,17 @@
   }
 
   // DEVTOOL : seed board
-  // placeAllShips()
-  // finish()
-  // placeAllShips()
-  // finish()
+  placeAllShips()
+  finish()
+  placeAllShips()
+  finish()
 
 </script>
 
 <div in:fade class="fullScreen setup">
 
   <div class="shipSelectionContainer">
-    <h1 class="instruction">{$players[currentPlayer].name}, navigate your ships!</h1>
+    <h1 class="instruction">{$players[$playerUp].name}, navigate your ships!</h1>
 
     <ul class="shipSelections">
       {#each shipSelections as { name, length, placed, selected } }
@@ -199,7 +198,7 @@
   <div class="gameboard__setup" style="--boardSize: {boardSize}">
     <div class='warning' style="--top: {warningPosY}px; --left: {warningPosX}px;">{warning}</div>
 
-    {#each $boards[currentPlayer].getBoard() as row, y}
+    {#each $boards[$playerUp].getBoard() as row, y}
       {#each row as square, x}
 
         {#if square !== null && typeof square === "object"}
