@@ -97,7 +97,7 @@
 <style>
 
   .scoreboard{
-    width: 100%;
+    width: 97%;
     display: flex;
     align-items: center;
     justify-content: space-around;

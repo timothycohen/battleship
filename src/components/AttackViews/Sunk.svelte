@@ -3,7 +3,8 @@
 </script>
 
 <img class="icon--ship" src="/icons/ship.svg" alt="ship icon" />
-<Hit on:mounted/>
+<Hit on:mounted />
+
 
 <style>
   .icon--ship{

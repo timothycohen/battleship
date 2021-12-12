@@ -28,6 +28,7 @@
     attack['width'] = hitPosition.right - hitPosition.left
     attack['top'] = hitPosition.top + window.scrollY
     attack['left'] = hitPosition.left + window.scrollX
+    new Audio('/audio/attack.wav').play();
     animate = true;
   }
 

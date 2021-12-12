@@ -4,7 +4,12 @@
 
 	const dispatch = createEventDispatcher();
 
-  onMount( () => dispatch('mounted') )
+  onMount( () => {
+    const splash = new Audio('/audio/splash.wav')
+    splash.volume = .2
+    splash.play();
+    dispatch('mounted')
+  });
 </script>
 
   <img class="icon--splash" src="/icons/splash.svg" alt="splash icon" />

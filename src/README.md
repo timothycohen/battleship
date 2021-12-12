@@ -18,9 +18,9 @@
 - [x] gameover view
 - [x] scoreboard
 - [x] show last attack position
+- [x] sounds
 - [ ] check on multiple screen sizes
 - [ ] represent ships across multiple squares instead of individual spaces
-- [ ] sounds
 
 ### testing:
 - [ ] placeShipsRandomly is not a pure function. need to mock for timeout/thrown error
