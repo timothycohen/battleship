@@ -29,6 +29,7 @@
   player2Name = 'Joe';
   // $twoPlayerMode = false;
   // quickStartGame()
+  // startGame()
 
 </script>
 
@@ -96,8 +97,7 @@
   }
 
   .header{
-    margin-top: 20vh;
-    margin-bottom: 5vh;
+    margin: 5vh 0 3vh 0;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -151,6 +151,9 @@
     color: white;
     border-radius: 4px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   button:hover{
@@ -182,17 +185,29 @@
     grid-column-end: 13;
   }
 
+  @media only screen and (max-width: 600px) and (max-width: 350px) {
+    form{
+      gap: .3rem;
+    }
+  }
+
+  @media only screen and (min-height: 500px) {
+    .header{
+      margin: 20vh 0 5vh 0;
+    }
+  }
+
   @media only screen and (min-width: 750px) and (min-height: 500px) {
     h1{
       font-size: 8rem;
+    }
+    .header{
+      margin: 5vh 0 3vh 0;
     }
     .icon--cannon{
       height: 8rem;
       width: 8rem;
       transform: scale(-1, 1);
-    }
-    .header{
-      margin-top: 10vh;
     }
     form{
       gap: 2rem;
@@ -216,6 +231,12 @@
     }
     .newGameBtn{
       font-size: 3rem;
+    }
+  }
+
+  @media only screen and (min-width: 750px) and (min-height: 750px) {
+    .header{
+      margin: 20vh 0 5vh 0;
     }
   }
 

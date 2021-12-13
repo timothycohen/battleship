@@ -36,11 +36,10 @@
 
   button{
     width: 80%;
-    font-size: 1.5rem;
-    height: 3rem;
+    font-size: 4rem;
     border: 1px solid var(--bluelighten90);
     background-color: var(--bluedarken70);
-    color: white;
+    color: var(--bluelighten90);
     border-radius: 4px;
     cursor: pointer;
   }
