@@ -115,26 +115,32 @@ test('receivedAttack returns true if and only if a ship at the position has been
     .toBe(false)
 })
 
-test('getShips returns an array of all ship objects on the board', () => {
+test('getShipsPlaced returns an array of all ship objects on the board', () => {
   const board = createGameboard(10);
   board.placeShip([3,2], 'Submarine', 'ver')
   board.placeShip([6,6], 'Destroyer', 'hor')
 
-  expect(board.getShips().length)
+  expect(board.getShipsPlaced().length)
     .toBe(2)
-  expect(typeof board.getShips()[0])
+  expect(typeof board.getShipsPlaced()[0])
     .toBe("object")
 })
 
 // NOTIMPLEMENTED
 // This is not a pure function (uses Math.random)
 // Need to mock to test error thrown or returns false after failing 200 times
-test('placeShipsRandomly places five ships on the board and returns true', () => {
-  const board = createGameboard(9);
-  expect(board.placeShipsRandomly())
+test('placeShipsRandomly all places ships on the board and returns true', () => {
+  const board5 = createGameboard(9, 5);
+  expect(board5.placeShipsRandomly())
     .toBe(true)
-  expect(board.getShips().length)
+  expect(board5.getShipsPlaced().length)
     .toBe(5)
+
+  const board3 = createGameboard(7, 3);
+  expect(board3.placeShipsRandomly())
+    .toBe(true)
+  expect(board3.getShipsPlaced().length)
+    .toBe(3)
 })
 
 test('removeShip removes a ship from the board if present and returns true', () => {
@@ -145,7 +151,7 @@ test('removeShip removes a ship from the board if present and returns true', () 
   let nullArray = [nullRow, nullRow, nullRow, nullRow, nullRow, nullRow, nullRow, nullRow, nullRow, nullRow]
   expect(board.removeShip([3,3]))
     .toBe(true)
-  expect(board.getShips().length)
+  expect(board.getShipsPlaced().length)
     .toBe(1)
   expect(board.placeShip([3,2], 'Submarine', 'hor'))
     .toBe(true)
@@ -153,7 +159,7 @@ test('removeShip removes a ship from the board if present and returns true', () 
     .toBe(true)
   expect(board.removeShip([3,2]))
     .toBe(true)
-  expect(board.getShips().length)
+  expect(board.getShipsPlaced().length)
     .toBe(0)
   expect(board.getBoard())
     .toEqual(nullArray)
@@ -198,3 +204,31 @@ test('squareStatus returns the status: null, miss, ship, hit, sunk', () => {
     .toBe('miss')
 })
 
+it('optionally takes an int number of ships between 3 and 5', () => {
+  expect(() => createGameboard(9, '1'))
+    .toThrowError('numberOfShips must be an int between 3 and 5 inclusive')
+  expect(() => createGameboard(9, 2))
+    .toThrowError('numberOfShips must be an int between 3 and 5 inclusive')
+  expect(() => createGameboard(9, 6))
+    .toThrowError('numberOfShips must be an int between 3 and 5 inclusive')
+})
+
+test('getShipSelection returns an array of objects with name and length properties', () => {
+  const board = createGameboard(10, 4)
+  const SHIPSELECTION = board.getShipSelection()
+
+  expect(SHIPSELECTION.length)
+    .toBe(4)
+  expect(typeof SHIPSELECTION[0])
+    .toBe('object')
+  expect(Object.keys(SHIPSELECTION[0]).length)
+    .toBe(2)
+
+  const expectedProperties = ['name', 'length']
+
+  const shipKeys = Object.keys(SHIPSELECTION[0])
+
+  expect( shipKeys.reduce((prev, key) => { return prev && expectedProperties.includes(key) }, true) )
+    .toBe(true)
+
+})

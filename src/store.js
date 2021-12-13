@@ -8,8 +8,12 @@ export const boards = writable([])
 
 export const playerUp = writable(0)
 
-export const boardSize = 8;
+export const boardSize = writable(8);
+
+export const numberOfShips = writable(5);
 
 export const lastAttackLocation = writable([])
 
 export const twoPlayerMode = writable(true)
+
+export const quickStart = writable(false);

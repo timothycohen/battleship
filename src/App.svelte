@@ -1,5 +1,6 @@
 <script>
   import StartGameForm from "./StartGameForm.svelte";
+  import Options from "./Options.svelte";
   import Setup from "./Setup.svelte";
   import Scoreboard from "./Scoreboard.svelte";
   import Gameboard from "./Gameboard.svelte";
@@ -14,6 +15,8 @@
 
   {#if $view === 'new'}
     <StartGameForm />
+  {:else if $view === 'options'}
+    <Options />
   {:else if $view === 'setup'}
     <Setup />
   {:else if $view === 'board'}

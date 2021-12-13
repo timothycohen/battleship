@@ -1,6 +1,6 @@
 <script>
   import { createPlayer } from './scripts/create-player'
-  import { players, view, twoPlayerMode } from './store'
+  import { players, view, twoPlayerMode, quickStart } from './store'
   import { fade } from 'svelte/transition'
   import { onMount } from 'svelte'
 
@@ -16,14 +16,19 @@
     let isHuman = [true, $twoPlayerMode];
 
     $players = playerNames.map((name, i) => createPlayer(name, isHuman[i]));
-    $view = 'setup'
+    $view = 'options'
+  }
+
+  function quickStartGame() {
+    $quickStart = true;
+    startGame();
   }
 
   // DEVTOOL : seed players
   player1Name = 'Jane';
   player2Name = 'Joe';
-  $twoPlayerMode = false
-  startGame();
+  // $twoPlayerMode = false;
+  // quickStartGame()
 
 </script>
 
@@ -50,6 +55,8 @@
       {#if $twoPlayerMode}1 Player{:else}2 Player{/if}
     </button>
 
+    <button on:click|preventDefault={quickStartGame} class="quickStartBtn">Quick Start</button>
+
     <button class="newGameBtn">New Game</button>
 
   </form>
@@ -63,7 +70,8 @@
     left: 0;
     top: 0;
     width: 100vw;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: none;
   }
 
   .bg{
@@ -82,72 +90,59 @@
 
   .startGame{
     z-index: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .header{
-    padding: 3rem 1rem;
+    margin-top: 20vh;
+    margin-bottom: 5vh;
+    width: 100%;
     display: flex;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
   }
 
   h1{
-    vertical-align: bottom;
-    height: 100%;
-    font-size: 2.5rem;
+    font-size: 4rem;
   }
 
   .icon--cannon{
-    height: 2.5rem;
-    width: 2.5rem;
+    height: 4rem;
+    width: 4rem;
     transform: scale(-1, 1);
   }
 
   form{
-    text-align: center;
-    padding: 2rem 1rem;
+    padding: 1rem;
     border-radius: 5px;
-    margin: auto;
     width: 90%;
     background-color: var(--blueroot);
     color: white;
-    gap: 3rem 1rem;
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-template-rows: auto auto auto;
     box-shadow: 0px 0px 10px 5px var(--gold);
+    display: grid;
+    grid-template-columns: repeat(12, auto);
+    grid-template-rows: repeat(3, auto);
+    gap: 1rem;
   }
 
   label{
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
     font-size: 1rem;
+    grid-column-start: 0;
+    grid-column-end: 3;
   }
 
   input{
     padding: .3rem;
-    font-size: .75rem;
+    font-size: 1.3rem;
     border-radius: 3px;
-  }
-
-  .newGameBtn{
-    font-size: 1rem;
-    height: 3rem;
-    grid-column-start: 2;
-    grid-column-end: 3;
-    width: 100%;
-    margin: auto;
-  }
-
-  .playerCountBtn{
-    justify-self: center;
-    align-self: flex-end;
-    font-size: .75rem;
-    height: 2rem;
-    width: 70%;
-    grid-column-start: 1;
-    grid-column-end: 2;
+    grid-column-start: 4;
+    grid-column-end: 13;
   }
 
   button{
@@ -162,33 +157,65 @@
     background-color: var(--bluedarken60);
   }
 
-  @media only screen and (min-width: 600px) {
-    .playerCountBtn{
-      font-size: .8rem;
-      width: 60%;
-    }
+  .playerCountBtn{
+    font-size: .75rem;
+    padding: .25rem;
+    grid-column-start: 0;
+    grid-column-end: 3;
+    align-self: end;
+    height: 75%;
+  }
 
-    .header{
-      padding: 1rem;
-    }
-    form{
-      width: 75%;
-    }
+  .quickStartBtn{
+    padding: .5rem;
+    font-size: 1rem;
+    grid-column-start: 4;
+    grid-column-end: 8;
+    align-self: end;
+    height: 75%;
+  }
+
+  .newGameBtn{
+    padding: .5rem;
+    font-size: 1.5rem;
+    grid-column-start: 8;
+    grid-column-end: 13;
+  }
+
+  @media only screen and (min-width: 750px) and (min-height: 500px) {
     h1{
-      font-size: 5rem;
+      font-size: 8rem;
     }
     .icon--cannon{
-      height: 5rem;
-      width: 5rem;
+      height: 8rem;
+      width: 8rem;
+      transform: scale(-1, 1);
+    }
+    .header{
+      margin-top: 10vh;
+    }
+    form{
+      gap: 2rem;
+      padding: 2rem;
     }
     label{
-      font-size: 2rem;
+      font-size: 2.5rem;
     }
     input{
-      font-size: 1.5rem;
+      padding: .5rem;
+      font-size: 2.5rem;
+    }
+    .playerCountBtn, .quickStartBtn, .newGameBtn{
+      padding: 1rem;
+    }
+    .playerCountBtn{
+      font-size: 2rem;
+    }
+    .quickStartBtn{
+      font-size: 2rem;
     }
     .newGameBtn{
-      font-size: 1.5rem;
+      font-size: 3rem;
     }
   }
 

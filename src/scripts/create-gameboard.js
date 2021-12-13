@@ -1,4 +1,4 @@
-const { createShip } = require("./create-ship");
+const { createShip, VALIDSHIPS } = require("./ship");
 
 /*
 each player has a gameboard
@@ -8,13 +8,15 @@ on each turn the player can view their gameboard with ship, hit ship, sunk ship,
 they can also view their opponent's gameboard with everything except the ships viewable
 */
 
-const createGameboard = ((size) => {
+const createGameboard = ((size, numberOfShips) => {
   if(size<6 || !Number.isInteger(size)) throw Error('argument must be a positive integer greater than 5')
 
-  const GRIDSIZE = size;
-  const VALIDNAMES = ['Destroyer', 'Submarine', 'Cruiser', 'Battleship', 'Carrier'];
+  if (numberOfShips < 3 || numberOfShips > 5) throw Error('numberOfShips must be an int between 3 and 5 inclusive')
+  const shipsToPlace = VALIDSHIPS.slice(VALIDSHIPS.length-numberOfShips)
 
-  let ships = [];
+  const GRIDSIZE = size;
+
+  let shipsPlaced = [];
 
   let board = initializeBoard(GRIDSIZE);
 
@@ -26,7 +28,7 @@ const createGameboard = ((size) => {
     if (
           arguments.length !== 3
       || !(Array.isArray(position) && position.length === 2 && Number.isInteger(position[0]) && Number.isInteger(position[1]))
-      || !VALIDNAMES.includes(shipName)
+      || !shipsToPlace.map(ship => ship.name).includes(shipName)
       || !(direction === 'ver' || direction === 'hor')
       ){
       throw Error(`arguments: [int y, int x] position, ship name, 'ver' or 'hor'`)
@@ -63,7 +65,7 @@ const createGameboard = ((size) => {
     positions.forEach((pos, i) => {
       board[pos[0]][pos[1]] = { ship: tempShip, position: i }
     })
-    ships.push(tempShip)
+    shipsPlaced.push(tempShip)
     return true;
     }
 
@@ -89,7 +91,7 @@ const createGameboard = ((size) => {
 
   function gameOver() {
     let over = true;
-    ships.forEach(ship => {
+    shipsPlaced.forEach(ship => {
       if (ship.isSunk() === false) over = false
     });
     return over
@@ -110,18 +112,18 @@ const createGameboard = ((size) => {
   }
 
   function getShipById(id) {
-    for (const ship of ships){
+    for (const ship of shipsPlaced){
       if (ship.id === id) return ship
     }
   }
 
-  const getShips = () => ships
+  const getShipsPlaced = () => shipsPlaced
 
   function placeShipsRandomly() {
     let count = 0;
-    while(ships.length<VALIDNAMES.length || count === 200){
+    while(shipsPlaced.length<shipsToPlace.length || count === 200){
       try{
-        placeShip(chooseRandomPos(), VALIDNAMES[ships.length], chooseRandomDir())
+        placeShip(chooseRandomPos(), shipsToPlace[shipsPlaced.length].name, chooseRandomDir())
       } catch (err) {
         count++
         if (err.message !== 'ships cannot overlap'
@@ -158,7 +160,7 @@ const createGameboard = ((size) => {
         }
       }
 
-      ships = ships.filter(ship => ship.id !== shipId)
+      shipsPlaced = shipsPlaced.filter(ship => ship.id !== shipId)
 
       return true;
     } catch(err) {
@@ -175,6 +177,8 @@ const createGameboard = ((size) => {
       return 'ship'
   }
 
+  const getShipSelection = () => shipsToPlace
+
   return{
     getBoard,
     placeShip,
@@ -182,7 +186,8 @@ const createGameboard = ((size) => {
     placeShipsRandomly,
     receiveAttack,
     gameOver,
-    getShips,
+    getShipsPlaced,
+    getShipSelection,
     squareStatus,
   }
 })

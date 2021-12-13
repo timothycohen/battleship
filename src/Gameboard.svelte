@@ -48,7 +48,7 @@
       <h1>Fire into enemy {$players[opponent].name}'s waters!</h1>
     </div>
 
-    <div class="gameboard__opponent" style="--boardSize: {boardSize}">
+    <div class="gameboard__opponent" style="--boardSize: {$boardSize}">
       {#each $boards[opponent].getBoard() as row, y}
         {#each row as square, x}
 
@@ -77,7 +77,7 @@
       {/if}
     </div>
 
-    <div class="gameboard__player" style="--boardSize: {boardSize}">
+    <div class="gameboard__player" style="--boardSize: {$boardSize}">
       {#each $boards[$playerUp].getBoard() as row, y}
         {#each row as square, x}
           {#if square === 'miss'}

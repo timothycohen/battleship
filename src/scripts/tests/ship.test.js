@@ -1,35 +1,21 @@
-const { createShip } = require('../create-ship.js')
+const { createShip, VALIDSHIPS } = require("../ship");
 
 it('produces an object', () => {
   expect(typeof createShip('Carrier'))
     .toBe("object")
 });
 
-it('has three properties(name, length, id) and three methods (hit, isSunk, inspectShip)', () => {
-  const obj = createShip('Cruiser')
-    let methods = [];
-    let properties = [];
-    for (let i in obj) {
-    if (typeof(obj[i]) !== "function") properties.push(i);
-    if (typeof(obj[i]) === "function") methods.push(i);
-  }
+it('creates a ship with name according to the input', () => {
+  const ship = createShip('Destroyer')
+  expect(ship.name)
+    .toBe('Destroyer')
+})
 
-  expect(methods)
-    .toEqual(['hit', 'isSunk', 'inspectShip'])
-  expect(properties)
-    .toEqual(['name', 'length', 'id'])
-});
-
-it('throws an error if not a valid name', () => {
-  expect(() => createShip(''))
-    .toThrowError('valid names are Destroyer, Submarine, Cruiser, Battleship, Carrier')
-  expect(() => createShip())
-    .toThrowError('valid names are Destroyer, Submarine, Cruiser, Battleship, Carrier')
-  expect(() => createShip('Carr'))
-    .toThrowError('valid names are Destroyer, Submarine, Cruiser, Battleship, Carrier')
-  expect(() => createShip('Carrierr'))
-    .toThrowError('valid names are Destroyer, Submarine, Cruiser, Battleship, Carrier')
-});
+it('creates a ship with an integer id', () => {
+  const ship = createShip('Destroyer')
+  expect(Number.isInteger(ship.id))
+    .toBe(true)
+})
 
 it('creates a ship with length according to the name', () => {
   const ship2 = createShip('Destroyer')
@@ -48,6 +34,17 @@ it('creates a ship with length according to the name', () => {
   expect(ship5.length)
     .toBe(5)
 })
+
+it('throws an error if not a valid name', () => {
+  expect(() => createShip(''))
+    .toThrowError('valid names are')
+  expect(() => createShip())
+    .toThrowError('valid names are')
+  expect(() => createShip('Carr'))
+    .toThrowError('valid names are')
+  expect(() => createShip('Carrierr'))
+    .toThrowError('valid names are')
+});
 
 test('the hit method throws an error when the argument isn\'t from 0 to length-1', () => {
   const ship = createShip("Submarine")
@@ -119,4 +116,18 @@ test('inspectShip throws an error if the argument isn\'t an integer from 0 to sh
     .toThrowError('argument not within length')
   expect(() => ship.inspectShip('3'))
     .toThrowError('argument must be an integer')
-  })
+})
+
+test('VALIDSHIPS is an array of objects with name and length properties', () => {
+  expect(typeof VALIDSHIPS[0])
+    .toBe('object')
+  expect(Object.keys(VALIDSHIPS[0]).length)
+    .toBe(2)
+
+  const expectedProperties = ['name', 'length']
+
+  const shipKeys = Object.keys(VALIDSHIPS[0])
+
+  expect( shipKeys.reduce((prev, key) => { return prev && expectedProperties.includes(key) }, true) )
+    .toBe(true)
+})

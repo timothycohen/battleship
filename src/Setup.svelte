@@ -1,31 +1,31 @@
 <script>
   import { createGameboard } from './scripts/create-gameboard'
-  import { boards, view, players, boardSize, twoPlayerMode, playerUp } from './store'
+  import ReadyBtn from './components/ReadyBtn.svelte'
+  import { boards, view, players, boardSize, twoPlayerMode, playerUp, numberOfShips, quickStart } from './store'
   import { fade } from 'svelte/transition'
 
   // create a new gameboard for each player
   for (let i=0; i<$players.length; i++){
-    $boards = [...$boards, createGameboard(boardSize)]
+    $boards = [...$boards, createGameboard($boardSize, $numberOfShips)]
   }
 
-  // one ship from the following menu can be selected for placement on the board
-  let shipSelections = [
-    {name: 'Carrier', length: 5, placed: false, id: null, selected: true},
-    {name: 'Battleship', length: 4, placed: false, id: null, selected: false},
-    {name: 'Cruiser', length: 3, placed: false, id: null, selected: false},
-    {name: 'Submarine', length: 3, placed: false, id: null, selected: false},
-    {name: 'Destroyer', length: 2, placed: false, id: null, selected: false},
-  ];
+  // ex: [ {name: 'Carrier', length: 5, placed: false, id: null, selected: true}, ... ]
+  let shipSelections = $boards[0].getShipSelection()
+  shipSelections.forEach((ship, i) => {
+    ship.placed = false;
+    ship.id = null;
+    ship.selected = i === 0 ? true : false;
+  })
 
   $: activeShipSelection = shipSelections.find(ship => ship.selected)
 
-  // the ready button is disabled until all ships are placed
+  // the ready button is only rendered when all ships are placed
   $: finished = shipSelections.reduce((prev, ship) => prev && ship.placed, true)
 
   // any time the board is updated, the ship menu selection updates the placed bool and ship id
   $: {
     shipSelections.forEach(ship => { ship.placed = false; ship.id = null })
-    const shipsOnBoard = $boards[$playerUp].getShips()
+    const shipsOnBoard = $boards[$playerUp].getShipsPlaced()
     shipsOnBoard.forEach(ship => {
       let option = shipSelections.find(selection => selection.name === ship.name)
       option.placed = true;
@@ -75,14 +75,14 @@
   // placeShipsRandomly is not a pure function (uses math.random), if it fails after 200 times, it will return false
   // the reactive components handle the DOM and selection menu
   function placeAllShips() {
-    let tempBoard = createGameboard(boardSize)
+    let tempBoard = createGameboard($boardSize, $numberOfShips)
     tempBoard.placeShipsRandomly()
     $boards[$playerUp] = tempBoard;
   }
 
   // reset the board array. the reactive components handle the DOM and selection menu
   function clear() {
-    let tempBoard = createGameboard(boardSize)
+    let tempBoard = createGameboard($boardSize, $numberOfShips)
     $boards[0] = tempBoard;
   }
 
@@ -127,11 +127,14 @@
     shipSelections[shipIndex].selected = true
   }
 
-  // DEVTOOL : seed board
-  placeAllShips()
-  finish()
-  // placeAllShips()
-  // finish()
+  if ($quickStart) {
+    placeAllShips()
+    finish()
+    if ($twoPlayerMode) {
+      placeAllShips()
+      finish()
+    }
+  }
 
 </script>
 
@@ -178,7 +181,7 @@
 
     <div class="selectionExample">
       {#if finished}
-        <button class="finishedBtn" disabled={!finished} on:click={finish}>Ready!</button>
+        <ReadyBtn on:click={finish}/>
       {:else}
         {#each shipSelections as ship }
           {#if ship.selected}
@@ -195,7 +198,7 @@
 
   </div>
 
-  <div class="gameboard__setup" style="--boardSize: {boardSize}">
+  <div class="gameboard__setup" style="--boardSize: {$boardSize}">
     <div class='warning' style="--top: {warningPosY}px; --left: {warningPosX}px;">{warning}</div>
 
     {#each $boards[$playerUp].getBoard() as row, y}
@@ -312,20 +315,6 @@
   font-size: 1.5rem;
   font-weight: bolder;
   text-align: center;
-}
-
-.finishedBtn{
-  color: var(--bluedarken40);
-  padding: .75rem 1rem;
-  font-size: 2rem;
-  font-weight: bolder;
-  box-shadow: 0 5px 15px -7px var(--gold);
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.finishedBtn:hover{
-  box-shadow: 0 5px 15px 0px var(--gold);
 }
 
 .selectionExample--icons{

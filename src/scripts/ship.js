@@ -1,18 +1,17 @@
 let id = 0;
 
-let nameToLength = {
-  'Carrier': 5,
-  'Battleship': 4,
-  'Cruiser': 3,
-  'Submarine': 3,
-  'Destroyer': 2,
-};
-
-const VALIDNAMES = ['Destroyer', 'Submarine', 'Cruiser', 'Battleship', 'Carrier'];
+const VALIDSHIPS = [
+  {name: 'Carrier', length: 5},
+  {name: 'Battleship', length: 4},
+  {name: 'Cruiser', length: 3},
+  {name: 'Submarine', length: 3},
+  {name: 'Destroyer', length: 2},
+];
 
 const createShip = (name => {
-  if (!VALIDNAMES.includes(name)) throw Error(`valid names are ${VALIDNAMES.join(', ')}`)
-  const length = nameToLength[name]
+  if (!VALIDSHIPS.map(ship => ship.name).includes(name)) throw Error(`valid names are ${VALIDSHIPS.map(ship => ship.name).join(', ')}`)
+
+  const length = VALIDSHIPS.find(ship => ship.name === name).length
 
   let ship = {}
 
@@ -59,4 +58,4 @@ const createShip = (name => {
   }
 })
 
-module.exports = { createShip }
+module.exports = { createShip, VALIDSHIPS }

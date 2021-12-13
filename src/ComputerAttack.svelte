@@ -6,7 +6,7 @@
 
   function getUnattackedPos() {
     if (pos && ($boards[0].squareStatus(pos) === null || $boards[0].squareStatus(pos) === 'ship')) return
-    pos = $players[$playerUp].chooseRandom(boardSize)
+    pos = $players[$playerUp].chooseRandom($boardSize)
     getUnattackedPos()
   }
 

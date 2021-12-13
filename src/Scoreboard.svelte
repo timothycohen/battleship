@@ -1,72 +1,28 @@
 <script>
-  import { players, playerUp, boards } from './store'
+  import { players, playerUp, boards, boardSize } from './store'
 
-  $: player0Ships = $boards[0].getShips()
-  $: player1Ships = $boards[1].getShips()
+  $: player0Ships = $boards[0].getShipsPlaced()
+  $: player1Ships = $boards[1].getShipsPlaced()
   $: player0Active = player0Ships.length - player0ShipsSunk
   $: player1Active = player1Ships.length - player1ShipsSunk
 
-  $: player0ShipsSunk = $boards[0].getShips().reduce((total, currentShip) => {
+  $: player0ShipsSunk = $boards[0].getShipsPlaced().reduce((total, currentShip) => {
     if (currentShip.isSunk()) total++
     return total;
   }, 0)
 
-  $: player1ShipsSunk = $boards[1].getShips().reduce((total, currentShip) => {
+  $: player1ShipsSunk = $boards[1].getShipsPlaced().reduce((total, currentShip) => {
     if (currentShip.isSunk()) total++
     return total;
   }, 0)
 
   // DEVTOOL : seed attacks
-  $boards[1].receiveAttack([3,0])
-  $boards[1].receiveAttack([3,1])
-  $boards[1].receiveAttack([3,2])
-  $boards[1].receiveAttack([3,3])
-  $boards[1].receiveAttack([3,4])
-  $boards[1].receiveAttack([3,5])
-  $boards[1].receiveAttack([3,6])
-  $boards[1].receiveAttack([3,7])
-  $boards[1].receiveAttack([3,8])
-
-  $boards[1].receiveAttack([4,0])
-  $boards[1].receiveAttack([4,1])
-  $boards[1].receiveAttack([4,2])
-  $boards[1].receiveAttack([4,3])
-  $boards[1].receiveAttack([4,4])
-  $boards[1].receiveAttack([4,5])
-  $boards[1].receiveAttack([4,6])
-  $boards[1].receiveAttack([4,7])
-  $boards[1].receiveAttack([4,8])
-
-  $boards[1].receiveAttack([5,0])
-  $boards[1].receiveAttack([5,1])
-  $boards[1].receiveAttack([5,2])
-  $boards[1].receiveAttack([5,3])
-  $boards[1].receiveAttack([5,4])
-  $boards[1].receiveAttack([5,5])
-  $boards[1].receiveAttack([5,6])
-  $boards[1].receiveAttack([5,7])
-  $boards[1].receiveAttack([5,8])
-
-  $boards[1].receiveAttack([6,0])
-  $boards[1].receiveAttack([6,1])
-  $boards[1].receiveAttack([6,2])
-  $boards[1].receiveAttack([6,3])
-  $boards[1].receiveAttack([6,4])
-  $boards[1].receiveAttack([6,5])
-  $boards[1].receiveAttack([6,6])
-  $boards[1].receiveAttack([6,7])
-  $boards[1].receiveAttack([6,8])
-
-  $boards[1].receiveAttack([7,0])
-  $boards[1].receiveAttack([7,1])
-  $boards[1].receiveAttack([7,2])
-  $boards[1].receiveAttack([7,3])
-  $boards[1].receiveAttack([7,4])
-  $boards[1].receiveAttack([7,5])
-  $boards[1].receiveAttack([7,6])
-  $boards[1].receiveAttack([7,7])
-  $boards[1].receiveAttack([7,8])
-
+  // for (let y = 0; y < boardSize - 2; y++) {
+  //   for (let x = 0; x < boardSize; x++) {
+  //     $boards[0].receiveAttack([y,x])
+  //     $boards[1].receiveAttack([y,x])
+  //   }
+  // }
 
 </script>
 
