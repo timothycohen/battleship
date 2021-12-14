@@ -1,14 +1,15 @@
 const createPlayer = ((name, human = true) => {
 
-  function chooseRandom(max){
+  function chooseRandom(max) {
     const ran1 = Math.floor(Math.random()*max)
     const ran2 = Math.floor(Math.random()*max)
     return [ran1, ran2]
   }
 
-  function chooseClose(position, max, direction){
+  function chooseClose(position, max) {
     let pos = [...position]
     const plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+    const direction = Math.random() < 0.5 ? 'hor' : 'ver';
 
     if (direction === 'ver') {
       pos[0] += plusOrMinus

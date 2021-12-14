@@ -14,26 +14,22 @@ it('correctly assigns a name and species', () => {
     .toBe(false)
 })
 
-test('chooseClose chooses a position one square away in the correct direction', () => {
+test('chooseClose chooses a position one square away in a random direction', () => {
   const player2 = createPlayer('John', false)
-  const max = 10
+  const max = 8
   const pos = [2, 6]
 
-  const randomChoiceVer = player2.chooseClose(pos, max, 'ver')
-  const validVer = [[1,6], [3,6]]
-  const invalidVer = [[1,7], [3,7]]
+  const randomChoice = player2.chooseClose(pos, max)
+  const valid = [[1,6], [3,6], [2,5], [2,7]]
+  const invalid = [[1,7], [3,7], [2,4], [2,6]]
 
-  const randomChoiceHor = player2.chooseClose(pos, max, 'hor')
-  const validHor = [[2,5], [2,7]]
-  const invalidHor = [[2,4], [2,6]]
-
-  expect(containsArr(validVer, randomChoiceVer))
+  expect(containsArr(valid, randomChoice))
     .toBe(true)
-  expect(containsArr(invalidVer, randomChoiceVer))
+  expect(containsArr(invalid, randomChoice))
     .toBe(false)
-  expect(containsArr(validHor, randomChoiceHor))
+  expect(containsArr(valid, randomChoice))
     .toBe(true)
-  expect(containsArr(invalidHor, randomChoiceHor))
+  expect(containsArr(invalid, randomChoice))
     .toBe(false)
 
 });
@@ -42,12 +38,15 @@ test('chooseClose doesn\t return below zero or above max', () => {
   const player2 = createPlayer('John', false)
   const max = 10
 
-  const randomChoiceHor = player2.chooseClose([0, 0], max, 'hor')
-  const randomChoiceVer = player2.chooseClose([9, 9], max, 'ver')
-  expect(randomChoiceHor)
-    .toEqual([0,1])
-  expect(randomChoiceVer)
-    .toEqual([8,9])
+  const randomChoiceLow = player2.chooseClose([0, 0], max)
+  const randomChoiceHigh = player2.chooseClose([9, 9], max)
+  const validLow = [[1, 0], [0, 1]]
+  const validHigh= [[8, 9], [9, 8]]
+
+  expect(containsArr(validLow, randomChoiceLow))
+    .toBe(true)
+    expect(containsArr(validHigh, randomChoiceHigh))
+    .toBe(true)
 })
 
 function containsArr(arr, sub) {

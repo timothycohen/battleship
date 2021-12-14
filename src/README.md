@@ -1,6 +1,3 @@
-### features:
-- [ ] make the computer smarter than just choosing random unattacked squares (scan the board for hits and choose a space one away)
-
 ### styling:
 - [ ] check on multiple screen sizes
 - [ ] represent ships across multiple squares instead of individual spaces
