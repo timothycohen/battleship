@@ -66,6 +66,10 @@
   </div>
 
   <div class="gameboard__options" style="--boardSize: {$boardSize}">
+    <div class="overlayBtn">
+      <ReadyBtn on:click={() => $view = 'setup'}/>
+    </div>
+
     {#each exampleBoard as row}
       {#each row as square}
         <div class="square"></div>
@@ -78,7 +82,11 @@
 <style>
 
 .options{
-  padding: 1rem;
+  padding: 1rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
 
 /* #################### SHIP SELECTION #################### */
@@ -90,7 +98,7 @@
   align-items: center;
   justify-content: space-around;
   min-height: 14rem;
-  width: 100%;
+  width: 90%;
   margin-bottom: 1rem;
 
   background-color: var(--blueroot);
@@ -101,14 +109,14 @@
   width: 100%;
   text-align: center;
   font-size: 2.5rem;
-  margin: .5rem 0;
+  margin: .5rem 0 0 0;
   color: var(--bluedarken70);
 }
 
 .shipSelections{
   background-color: var(--bluedarken40);
-  min-height: 12rem;
-  min-width: 15rem;
+  height: 12rem;
+  width: 17rem;
   padding: 1rem;
   margin: .5rem;
   border-radius: 5px;
@@ -148,8 +156,8 @@
 
 .optionsContainer, .readyContainer {
   background-color: var(--bluedarken40);
-  min-width: 13rem;
-  min-height: 13rem;
+  width: 13rem;
+  height: 12rem;
   padding: 1rem;
   margin: .5rem;
   border-radius: 5px;
@@ -164,8 +172,8 @@
   min-height: 0rem;
   min-width: 0rem;
   padding: 1.5rem;
+  display: none;
 }
-
 
 .ships, .waters, .mode{
   width: 100%;
@@ -195,18 +203,30 @@ button:disabled{
   width: 50%;
 }
 
+.overlayBtn{
+  width: 90%;
+  padding-top: 1rem;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* #################### BOARD #################### */
+
 .gameboard__options{
   display: grid;
   grid-template-columns: repeat(var(--boardSize), auto);
   grid-template-rows: repeat((--boardSize), auto);
+  width: 90vw;
+  height: 40vh;
 }
 
 .square{
   background: url(/icons/waves.svg) no-repeat center;
   background-size: cover;
-  min-width: 2rem;
-  min-height: 2rem;
+  width: 100%;
+  height: 100%;
   border: 1px solid gray;
   display: flex;
   justify-content: center;
@@ -214,9 +234,21 @@ button:disabled{
   background-color: rgb(173, 196, 230);
 }
 
-@media only screen and (max-width: 600px) {
-  .shipSelections{
+/* #################### BREAKPOINTS #################### */
+
+@media only screen and (min-width: 835px) {
+  .readyContainer{
+    display: flex;
+  }
+  .overlayBtn{
     display: none;
   }
 }
+
+@media only screen and (min-width: 750px) and (min-height: 1000px) {
+  .gameboard__options{
+    height: 60vh;
+  }
+}
+
 </style>

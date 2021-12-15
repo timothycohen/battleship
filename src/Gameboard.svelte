@@ -1,6 +1,6 @@
 <script>
   import { fade } from 'svelte/transition'
-  import { view, playerUp, boards, players, boardSize, lastAttackLocation, twoPlayerMode } from './store'
+  import { view, playerUp, boards, players, boardSize, lastAttackLocation, twoPlayerMode, audio } from './store'
 
   let opponent = $playerUp === 1 ? 0 : 1
   let showShips = false;
@@ -28,7 +28,7 @@
     attack['width'] = hitPosition.right - hitPosition.left
     attack['top'] = hitPosition.top + window.scrollY
     attack['left'] = hitPosition.left + window.scrollX
-    new Audio('/audio/attack.wav').play();
+    $audio && new Audio('/audio/attack.wav').play();
     animate = true;
   }
 
@@ -41,7 +41,7 @@
 
 </script>
 
-<div class="gameboard fullScreen">
+<div class="gameboard">
 
   <div class="opponent">
     <div class="header">
@@ -124,6 +124,7 @@
 
 .player, .opponent{
   padding: 1rem 0;
+  width: 100%;
 }
 
 .header{
@@ -168,18 +169,17 @@
 
 .hit{
   background: url(/icons/explosion.svg) no-repeat center;
-  background-size: contain;
   background-color: rgb(230, 173, 173);
 }
 
 .ship{
-  width: 100%;
-  height: 100%;
   background: url(/icons/ship.svg) no-repeat center;
-  background-size: contain;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-size: contain;
 }
 
 .open, .icon--bomb{
@@ -219,6 +219,12 @@ button:hover{
 @keyframes lastAttack{
   0%, 40%, 100% { box-shadow: none }
   20%, 60%, 80% { box-shadow: 0 0 5px 5px red inset; }
+}
+
+@media only screen and (min-width: 750px) and (min-height: 750px) {
+  .gameboard__opponent, .gameboard__player{
+    height: 40vh;
+  }
 }
 
 </style>

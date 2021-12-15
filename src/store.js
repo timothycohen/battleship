@@ -17,3 +17,5 @@ export const lastAttackLocation = writable([])
 export const twoPlayerMode = writable(true)
 
 export const quickStart = writable(false);
+
+export const audio = writable(true);

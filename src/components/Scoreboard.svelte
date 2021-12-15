@@ -1,5 +1,5 @@
 <script>
-  import { players, playerUp, boards, boardSize } from './store'
+  import { players, playerUp, boards, boardSize } from '../store'
 
   $: player0Ships = $boards[0].getShipsPlaced()
   $: player1Ships = $boards[1].getShipsPlaced()
@@ -17,8 +17,8 @@
   }, 0)
 
   // DEVTOOL : seed attacks
-  // for (let y = 0; y < boardSize - 2; y++) {
-  //   for (let x = 0; x < boardSize; x++) {
+  // for (let y = 0; y < $boardSize - 2; y++) {
+  //   for (let x = 0; x < $boardSize; x++) {
   //     $boards[0].receiveAttack([y,x])
   //     $boards[1].receiveAttack([y,x])
   //   }
@@ -53,13 +53,13 @@
 <style>
 
   .scoreboard{
-    width: 97%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-around;
     flex-wrap: wrap;
     margin-top: 1rem;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   .playerCard{

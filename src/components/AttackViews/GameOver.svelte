@@ -37,8 +37,6 @@ button {
   cursor: pointer;
   box-shadow: 0 0 0 0 var(--red);
   animation: pulse 2s infinite;
-  /* width: 8rem;
-  height: 8rem; */
   padding: 1rem;
   font-size: 2.5rem;
   color: var(--red);
@@ -71,8 +69,8 @@ button {
   }
 
   .win, .lose, .congrats{
-    padding: 2rem;
-    font-size: 5rem;
+    padding: 1.5rem;
+    font-size: 3rem;
     width: 100%;
     text-align: center;
     z-index: 5;
@@ -82,11 +80,11 @@ button {
   }
 
   .congrats{
-    font-size: 4rem;
+    font-size: 2.5rem;
   }
 
   .bgImg{
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     width: 100vw;
@@ -97,6 +95,24 @@ button {
     background-position-x: center;
     filter: blur(4px);
     z-index: -1;
+  }
+
+  @media only screen and (min-width: 400px) and (min-height: 450px) {
+    .win, .lose {
+      font-size: 5rem;
+    }
+    .congrats{
+      font-size: 4rem;
+    }
+  }
+
+  @media only screen and (min-width: 750px) {
+    .win, .lose {
+      font-size: 5rem;
+    }
+    .congrats{
+      font-size: 4rem;
+    }
   }
 
 </style>

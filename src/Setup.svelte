@@ -159,7 +159,7 @@
 
     <div class="optionsContainer">
       <button class="directionBtn" on:click={() => direction = direction === 'ver' ? 'hor' : 'ver'}>
-        {#if direction === 'ver'}
+        {#if direction === 'hor'}
           <img class="icon--hor" src="/icons/hor.svg" alt="horizontal icon"/>
           Horizontal
         {:else}
@@ -219,7 +219,11 @@
 <style>
 
 .setup{
-  padding: 1rem;
+  padding: 1rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
 
 /* #################### SHIP SELECTION #################### */
@@ -231,7 +235,7 @@
   align-items: center;
   justify-content: space-around;
   min-height: 14rem;
-  width: 100%;
+  width: 90%;
   margin-bottom: 1rem;
 
   background-color: var(--blueroot);
@@ -242,7 +246,7 @@
   width: 100%;
   text-align: center;
   font-size: 2.5rem;
-  margin: .5rem 0;
+  margin: .5rem 0 0 0;
   color: var(--bluedarken70);
 }
 
@@ -308,6 +312,7 @@
 .selectionExample{
   justify-content: center;
   min-height: 14rem;
+  display: none;
 }
 
 .selectionExample--name{
@@ -348,7 +353,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: .5rem 1rem;
+  width: 5.75rem;
+  height: 2.2rem;
   cursor: pointer;
   border-radius: 5px;
   background-color: var(--bluelighten60);
@@ -376,6 +382,8 @@
 }
 
 .gameboard__setup{
+  width: 90vw;
+  height: 40vh;
   display: grid;
   grid-template-columns: repeat(var(--boardSize), auto);
   grid-template-rows: repeat((--boardSize), auto);
@@ -384,8 +392,8 @@
 .square{
   background: url(/icons/waves.svg) no-repeat center;
   background-size: cover;
-  min-width: 2rem;
-  min-height: 2rem;
+  width: 100%;
+  height: 100%;
   border: 1px solid gray;
   display: flex;
   justify-content: center;
@@ -409,6 +417,25 @@
 
 .open{
   cursor: pointer;
+}
+
+@media only screen and (min-width: 400px) and (min-height: 400px) {
+  .selectionExample{
+    display: flex;
+  }
+}
+
+@media only screen and (min-width: 750px) and (min-height: 350px) {
+  .selectionExample{
+    display: flex;
+  }
+}
+
+@media only screen and (min-width: 750px) and (min-height: 1000px) {
+  .gameboard__setup{
+    width: 80vw;
+    height: 60vh;
+  }
 }
 
 </style>

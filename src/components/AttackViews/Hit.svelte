@@ -1,11 +1,11 @@
 <script>
-  import { onMount } from 'svelte'
-  import { createEventDispatcher } from 'svelte'
+  import { onMount, createEventDispatcher } from 'svelte'
+  import { audio } from '../../store'
 
 	const dispatch = createEventDispatcher();
 
   onMount( () => {
-    new Audio('/audio/hit.wav').play();
+    $audio && new Audio('/audio/hit.wav').play();
     dispatch('mounted')
   })
 
@@ -37,7 +37,7 @@
 
   @media only screen and (min-width: 750px) and (min-height: 750px) {
     @keyframes explode{
-      100% { opacity: 1; transform: scaleY(1.3) scaleX(1); }
+      100% { opacity: 1; transform: scaleY(.75) scaleX(1); }
     }
   }
 

@@ -8,8 +8,8 @@
 
   onMount(() => bgLoaded = true)
 
-  let player1Name;
-  let player2Name;
+  let player1Name = '';
+  let player2Name = '';
 
   const startGame = () => {
     const playerNames = [player1Name, player2Name];
@@ -20,14 +20,15 @@
   }
 
   function quickStartGame() {
+    if (player1Name === '' || player2Name === '') return document.querySelector('.newGameBtn').click();
     $quickStart = true;
     startGame();
   }
 
   // DEVTOOL : seed players
-  player1Name = 'Jane';
-  player2Name = 'Joe';
-  // $twoPlayerMode = false;
+  player1Name = '';
+  player2Name = 'Admiral';
+  $twoPlayerMode = false;
   // quickStartGame()
   // startGame()
 

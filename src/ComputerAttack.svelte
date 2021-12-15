@@ -34,7 +34,6 @@
         let centerPos = [y, x]
         if ($boards[0].squareStatus(centerPos) !== 'hit') continue
         if (getFreeNeighbor(centerPos) === false) continue;
-        console.log(getFreeNeighbor(centerPos))
         pos = getFreeNeighbor(centerPos)
         return true
       }

@@ -1,13 +1,14 @@
 <script>
-  import { onMount } from 'svelte'
-  import { createEventDispatcher } from 'svelte'
+  import { onMount, createEventDispatcher } from 'svelte'
+  import { audio } from '../../store'
+
 
 	const dispatch = createEventDispatcher();
 
   onMount( () => {
     const splash = new Audio('/audio/splash.wav')
     splash.volume = .2
-    splash.play();
+    $audio && splash.play();
     dispatch('mounted')
   });
 </script>
