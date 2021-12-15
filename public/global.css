@@ -23,7 +23,7 @@ body, .fullScreen{
 
 @font-face {
   font-family: 'Colossalis';
-  src: url('/fonts/Colossalis Regular/Colossalis Regular.otf');
+  src: url('./fonts/Colossalis Regular/Colossalis Regular.otf');
 }
 
 /* https://maketintsandshades.com/#005EB8 */
