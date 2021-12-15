@@ -143,7 +143,13 @@
   <div class="shipSelectionContainer">
     <h1 class="instruction">{$players[$playerUp].name}, navigate your ships!</h1>
 
+
     <ul class="shipSelections">
+      {#if finished}
+        <div class="readyContainer">
+          <ReadyBtn on:click={finish}/>
+        </div>
+      {/if}
       {#each shipSelections as { name, length, placed, selected } }
         <li class="optionName"
           data-name={name}
@@ -340,8 +346,15 @@
   list-style: none;
 }
 
-/* #################### OPTION BUTTONS #################### */
+.readyContainer{
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
 
+/* #################### OPTION BUTTONS #################### */
 
 .optionsContainer{
   min-width: 9rem;
@@ -423,11 +436,17 @@
   .selectionExample{
     display: flex;
   }
+  .readyContainer{
+    display: none;
+  }
 }
 
 @media only screen and (min-width: 750px) and (min-height: 350px) {
   .selectionExample{
     display: flex;
+  }
+  .readyContainer{
+    display: none;
   }
 }
 
