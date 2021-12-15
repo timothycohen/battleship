@@ -148,7 +148,7 @@
 .shipSelections > li > ul > li{
   width: 2rem;
   height: 2rem;
-  background: url(/icons/ship.svg) no-repeat center;
+  background: url(../icons/ship.svg) no-repeat center;
   background-size: contain;
 }
 
@@ -223,7 +223,7 @@ button:disabled{
 }
 
 .square{
-  background: url(/icons/waves.svg) no-repeat center;
+  background: url(../icons/waves.svg) no-repeat center;
   background-size: cover;
   width: 100%;
   height: 100%;

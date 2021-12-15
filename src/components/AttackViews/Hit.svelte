@@ -5,13 +5,13 @@
 	const dispatch = createEventDispatcher();
 
   onMount( () => {
-    $audio && new Audio('/audio/hit.wav').play();
+    $audio && new Audio('./audio/hit.wav').play();
     dispatch('mounted')
   })
 
 </script>
 
-<img class="icon--explosion" src="/icons/explosion.svg" alt="explosion icon" />
+<img class="icon--explosion" src="./icons/explosion.svg" alt="explosion icon" />
 <style>
 
   .icon--explosion{

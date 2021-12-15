@@ -5,9 +5,9 @@ import { audio } from '../store'
 
 <div class="audio">
   {#if $audio}
-    <img on:click={ ()=> $audio = !$audio } class="icon--volumeOn" src="/icons/volumeOn.svg" alt="volume on icon" />
+    <img on:click={ ()=> $audio = !$audio } class="icon--volumeOn" src="./icons/volumeOn.svg" alt="volume on icon" />
   {:else}
-    <img on:click={ ()=> $audio = !$audio } class="icon--volumeOff" src="/icons/volumeOff.svg" alt="volume off icon" />
+    <img on:click={ ()=> $audio = !$audio } class="icon--volumeOff" src="./icons/volumeOff.svg" alt="volume off icon" />
   {/if}
 </div>
 

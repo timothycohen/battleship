@@ -41,7 +41,7 @@
 <div class="startGame" in:fade="{{ delay: 300, duration: 700 }}">
   <div class="header">
     <h1>Battleship</h1>
-    <img class="icon--cannon" src="/favicon.svg" alt="cannon icon"/>
+    <img class="icon--cannon" src="./favicon.svg" alt="cannon icon"/>
   </div>
   <form id="players" on:submit|preventDefault={startGame}>
     <label for="player1">Player 1</label>
@@ -82,7 +82,7 @@
   }
 
   .bgImg{
-    background-image: url(/images/cover-image.jpg);
+    background-image: url(../images/cover-image.jpg);
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position-x: center;

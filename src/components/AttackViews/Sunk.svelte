@@ -2,7 +2,7 @@
   import Hit from './Hit.svelte'
 </script>
 
-<img class="icon--ship" src="/icons/ship.svg" alt="ship icon" />
+<img class="icon--ship" src="./icons/ship.svg" alt="ship icon" />
 <Hit on:mounted />
 
 

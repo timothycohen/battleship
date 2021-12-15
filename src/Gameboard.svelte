@@ -28,7 +28,7 @@
     attack['width'] = hitPosition.right - hitPosition.left
     attack['top'] = hitPosition.top + window.scrollY
     attack['left'] = hitPosition.left + window.scrollX
-    $audio && new Audio('/audio/attack.wav').play();
+    $audio && new Audio('./audio/attack.wav').play();
     animate = true;
   }
 
@@ -108,7 +108,7 @@
   {#if animate}
   <img in:fade={{duration: 1000, easing: (t) => t}}
     on:introend="{sendAttack}"
-    class="icon--bomb" src="/icons/bomb.svg" alt="bomb icon"
+    class="icon--bomb" src="./icons/bomb.svg" alt="bomb icon"
     style="--height: {attack.height}px; --width: {attack.width}px; --top: {attack.top}px; --left: {attack.left}px; "
   />
   {/if}
@@ -146,7 +146,7 @@
 }
 
 .square{
-  background: url(/icons/waves.svg) no-repeat center;
+  background: url(../icons/waves.svg) no-repeat center;
   background-size: cover;
   min-width: 2rem;
   min-height: 2rem;
@@ -162,18 +162,18 @@
 }
 
 .missed{
-  background: url(/icons/splash.svg) no-repeat center;
+  background: url(../icons/splash.svg) no-repeat center;
   background-size: contain;
   background-color: rgb(186, 194, 206);
 }
 
 .hit{
-  background: url(/icons/explosion.svg) no-repeat center;
+  background: url(../icons/explosion.svg) no-repeat center;
   background-color: rgb(230, 173, 173);
 }
 
 .ship{
-  background: url(/icons/ship.svg) no-repeat center;
+  background: url(../icons/ship.svg) no-repeat center;
   display: flex;
   align-items: center;
   justify-content: center;

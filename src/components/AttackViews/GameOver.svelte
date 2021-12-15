@@ -89,7 +89,7 @@ button {
     top: 0;
     width: 100vw;
     min-height: 100vh;
-    background-image: url(/images/cover-image.jpg);
+    background-image: url(../images/cover-image.jpg);
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position-x: center;

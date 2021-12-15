@@ -160,21 +160,21 @@
     <div class="optionsContainer">
       <button class="directionBtn" on:click={() => direction = direction === 'ver' ? 'hor' : 'ver'}>
         {#if direction === 'hor'}
-          <img class="icon--hor" src="/icons/hor.svg" alt="horizontal icon"/>
+          <img class="icon--hor" src="./icons/hor.svg" alt="horizontal icon"/>
           Horizontal
         {:else}
-          <img class="icon--ver" src="/icons/ver.svg" alt="vertical icon"/>
+          <img class="icon--ver" src="./icons/ver.svg" alt="vertical icon"/>
           Vertical
         {/if}
 
       </button>
 
       <button class="randomBtn" on:click={placeAllShips}>
-        <img class="icon--random" src="/icons/random.svg" alt="random icon"/>
+        <img class="icon--random" src="./icons/random.svg" alt="random icon"/>
         Random
       </button>
       <button class="clearBtn" on:click={clear}>
-        <img class="icon--clear" src="/icons/clear.svg" alt="clear icon"/>
+        <img class="icon--clear" src="./icons/clear.svg" alt="clear icon"/>
         Clear All
         </button>
     </div>
@@ -280,7 +280,7 @@
 .shipSelections > li > ul > li{
   width: 2rem;
   height: 2rem;
-  background: url(/icons/ship.svg) no-repeat center;
+  background: url(../icons/ship.svg) no-repeat center;
   background-size: contain;
 }
 
@@ -335,7 +335,7 @@
 .selectionExample--icons li{
   width: 2rem;
   height: 2rem;
-  background: url(/icons/ship.svg) no-repeat center;
+  background: url(../icons/ship.svg) no-repeat center;
   background-size: contain;
   list-style: none;
 }
@@ -390,7 +390,7 @@
 }
 
 .square{
-  background: url(/icons/waves.svg) no-repeat center;
+  background: url(../icons/waves.svg) no-repeat center;
   background-size: cover;
   width: 100%;
   height: 100%;
@@ -404,7 +404,7 @@
 .ship{
   width: 100%;
   height: 100%;
-  background: url(/icons/ship.svg) no-repeat center;
+  background: url(../icons/ship.svg) no-repeat center;
   background-size: contain;
   display: flex;
   align-items: center;

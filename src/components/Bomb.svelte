@@ -10,7 +10,7 @@
 
 <img in:fly={{duration: 600, x:randX, y:randY, easing: (t) => t}}
   on:introend
-  class="icon--bomb" src="/icons/bomb.svg" alt="bomb icon"
+  class="icon--bomb" src="./icons/bomb.svg" alt="bomb icon"
   style="height: {bombSize}px; width: {bombSize}px;"
 />
 
